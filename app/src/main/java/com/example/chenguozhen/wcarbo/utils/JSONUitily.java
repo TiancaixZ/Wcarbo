@@ -721,6 +721,7 @@ public class JSONUitily {
             String text = jsonObject.getString("text");
             status.setText(text);
             if (jsonObject.isNull("deleted")) {
+                status.setDeleted(false);
                 String source = jsonObject.getString("source");
                 status.setSource(source);
                 Boolean favorited = jsonObject.getBoolean("favorited");
@@ -735,8 +736,9 @@ public class JSONUitily {
                 status.setAttitudes_count(attitudes_count);
 
                 if (jsonObject.isNull("pic_urls")) {
-                    //
+                    status.setPhoto(false);
                 } else {
+                    status.setPhoto(true);
                     JSONArray pic_urls = jsonObject.getJSONArray("pic_urls");
                     List<ImageInfo> pic_urlList = new ArrayList<ImageInfo>();
                     for (int i = 0; i < pic_urls.length(); i++) {
@@ -756,6 +758,7 @@ public class JSONUitily {
                 status.setUsersBean(usersBean);
 
                 if (jsonObject.isNull("retweeted_status")) {
+                    status.setRetweeted_status(null);
                 } else {
                     Status re_status = new Status();
                     JSONObject retweeted_status = jsonObject.getJSONObject("retweeted_status");
@@ -765,7 +768,8 @@ public class JSONUitily {
                     re_status.setCreated_at(retweeted_created_at);
                     String retweeted_text = retweeted_status.getString("text");
                     re_status.setText(retweeted_text);
-                    if (!(jsonObject.isNull("deleted"))) {
+                    if (jsonObject.isNull("deleted")) {
+                        re_status.setDeleted(false);
                         String retweeted_source = retweeted_status.getString("source");
                         re_status.setSource(retweeted_source);
                         Boolean retweeted_favorited = retweeted_status.getBoolean("favorited");
@@ -780,8 +784,9 @@ public class JSONUitily {
                         re_status.setAttitudes_count(retweeted_attitudes_count);
 
                         if (jsonObject.isNull("pic_urls")) {
-
+                            re_status.setPhoto(false);
                         } else {
+                            re_status.setPhoto(true);
                             JSONArray retweeted_pic_urls = retweeted_status.getJSONArray("pic_urls");
                             List<ImageInfo> pic_urlList = new ArrayList<ImageInfo>();
                             for (int i = 0; i < retweeted_pic_urls.length(); i++) {
@@ -792,7 +797,7 @@ public class JSONUitily {
                                 imageInfo.setBigImageUrl(thumbnail_pic);
                                 pic_urlList.add(imageInfo);
                             }
-                            status.setPic_urls(pic_urlList);
+                            re_status.setPic_urls(pic_urlList);
                         }
 
                         JSONObject retweeted_user = retweeted_status.getJSONObject("user");
@@ -800,8 +805,14 @@ public class JSONUitily {
                         re_status.setUsersBean(re_usersBean);
 
                         status.setRetweeted_status(re_status);
+                    } else {
+                        re_status.setDeleted(true);
+                        status.setRetweeted_status(re_status);
                     }
                 }
+            } else {
+                status.setDeleted(true);
+                return status;
             }
         } catch (JSONException e) {
             e.printStackTrace();

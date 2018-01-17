@@ -24,6 +24,25 @@ public class Status {
     private UsersBean usersBean;
     private Status retweeted_status;
 
+    private boolean deleted;
+    private boolean photo;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(boolean photo) {
+        this.photo = photo;
+    }
+
     public String getCreated_at() {
         return created_at;
     }

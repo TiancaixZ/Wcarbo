@@ -16,7 +16,9 @@ import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.example.chenguozhen.wcarbo.Bean.Status;
 import com.example.chenguozhen.wcarbo.Constants;
 import com.example.chenguozhen.wcarbo.R;
+import com.example.chenguozhen.wcarbo.RecyclerView.Holder.DeletedViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.ImageViewHolder;
+import com.example.chenguozhen.wcarbo.RecyclerView.Holder.RetweetedDeletedViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.RetweetedImageViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.RetwwetedTextViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.TextViewHolder;
@@ -45,9 +47,6 @@ import okhttp3.Response;
 
 public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Collectionweibo> mcollectionweiboList;
-    private List<Collectionweibo_Pic_urls> mPic_urls;
-
     private List<Favorites.FavoritesBean> mfavoritesBeans;
 
     private static String url = "https://api.weibo.com/2/users/show.json?source=3867086258";
@@ -58,54 +57,38 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
     private final int TEXTVIEWTYPE = 2;
     private final int RETWEETEDIMAGEVIEWYPTE = 3;
     private final int RETWEETEDTEXTVIEWYTPE = 4;
+    private final int DELETEDTYPE = 5;
+    private final int RETWEETEDDELETEDTYPE = 6;
 
     public collection_list_adapter(List<Favorites.FavoritesBean> favoritesBeans, Fragment fragment){
-        //this.mcollectionweiboList = collectionweiboList;
-        //this.mPic_urls = pic_urls;
         this.mFragment = fragment;
-
         this.mfavoritesBeans = favoritesBeans;
     }
 
     @Override
     public int getItemViewType(int position) {
-        //Collectionweibo collectionweibo = mcollectionweiboList.get(position);
-
         Status status = mfavoritesBeans.get(position).getStatus();
-
         if (status.getRetweeted_status() == null){
-            if (status.getPic_urls().size() > 0){
-                return IMAGEVIEWTYPE;
+            if (status.isDeleted()){
+                return DELETEDTYPE;
             } else {
-                return TEXTVIEWTYPE;
-            }
-        } else {
-            if (status.getRetweeted_status().getPic_urls().size() > 0){
-                return RETWEETEDIMAGEVIEWYPTE;
-            } else {
-                return RETWEETEDTEXTVIEWYTPE;
-            }
-        }
-
-        /**
-        if (collectionweibo.getRetweeted() == null){
-            return TEXTVIEWTYPE;
-        } else {
-            if (collectionweibo.getRetweeted()){
-                if (collectionweibo.getRetweeted_Pic_urls_count() == 0){
-                    return RETWEETEDTEXTVIEWYTPE;
-                } else {
-                    return RETWEETEDIMAGEVIEWYPTE;
-                }
-            } else {
-                if (collectionweibo.getPic_urls_count() == 0){
-                    return TEXTVIEWTYPE;
-                } else {
+                if (status.isPhoto()){
                     return IMAGEVIEWTYPE;
+                } else {
+                    return TEXTVIEWTYPE;
+                }
+            }
+        } else {
+            if (status.getRetweeted_status().isDeleted()){
+                return RETWEETEDDELETEDTYPE;
+            } else {
+                if (status.getRetweeted_status().isPhoto()){
+                    return RETWEETEDIMAGEVIEWYPTE;
+                } else {
+                    return RETWEETEDTEXTVIEWYTPE;
                 }
             }
         }
-         **/
     }
 
     @Override
@@ -119,14 +102,14 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
                 }
             });
             holder.weibo_image_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
                 }
             });
             return holder;
@@ -138,14 +121,14 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
                 }
             });
             holder.weibo_text_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
                 }
             });
             return holder;
@@ -157,14 +140,28 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
                 }
             });
             holder.retweeted_weibo_iamge_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
+                }
+            });
+            holder.weibo_iamge_avatar_retweeted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    re_userpager(position);
+                }
+            });
+            holder.weibo_iamge_name_retweeted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    re_userpager(position);
                 }
             });
             return holder;
@@ -176,14 +173,52 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
                 }
             });
             holder.retweeted_weibo_text_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    init_userpager(position);
+                    userpager(position);
+                }
+            });
+            holder.weibo_text_avatar_retweeted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    re_userpager(position);
+                }
+            });
+            holder.weibo_text_name_retweeted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    re_userpager(position);
+                }
+            });
+            return holder;
+        } else if (viewType == DELETEDTYPE){
+            view = LayoutInflater.from(parent.getContext()).inflate
+                    (R.layout.layout_fragment_weibo_deleted,parent,false);
+            final DeletedViewHolder holder = new DeletedViewHolder(view);
+            return holder;
+        } else if (viewType == RETWEETEDDELETEDTYPE){
+            view = LayoutInflater.from(parent.getContext()).inflate
+                    (R.layout.layout_fragment_weibo_retweeted_deleted,parent,false);
+            final RetweetedDeletedViewHolder holder = new RetweetedDeletedViewHolder(view);
+            holder.retweeted_weibo_deleted_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    userpager(position);
+                }
+            });
+            holder.retweeted_weibo_deleted_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    userpager(position);
                 }
             });
             return holder;
@@ -194,33 +229,22 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Collectionweibo positionCollectionweibo = mcollectionweiboList.get(position);
 
+        Status status = mfavoritesBeans.get(position).getStatus();
 
-
-        String name = positionCollectionweibo.getScreen_name();
-        String avatar = positionCollectionweibo.getAvatar_hd();
-        String time = positionCollectionweibo.getCreated_at();
-        String source = StringUtil.getWeiboSource(positionCollectionweibo.getSource());
-        String content = positionCollectionweibo.getText();
-        boolean favorited = positionCollectionweibo.isFavorited();
-        boolean truncated = positionCollectionweibo.isTruncated();
-        int reposts_count = positionCollectionweibo.getReposts_count();
-        int comments_count = positionCollectionweibo.getComments_count();
-        int attitudes_count = positionCollectionweibo.getAttitudes_count();
-
-        Boolean retweeted = positionCollectionweibo.getRetweeted();
-        String retweeted_time = positionCollectionweibo.getRetweeted_created_at();
-        String retweeted_text = positionCollectionweibo.getRetweeted_text();
-        String retweeted_source = positionCollectionweibo.getRetweeted_source();
-        Boolean retweeted_favorited = positionCollectionweibo.getRetweeted_verified();
-        int retweeted_reposts_count = positionCollectionweibo.getRetweeted_reposts_count();
-        int retweeted_comments_count = positionCollectionweibo.getRetweeted_comments_count();
-        int retweeted_attiudes_count = positionCollectionweibo.getRetweeted_attitudes_count();
-        String retweeted_name = positionCollectionweibo.getRetweeted_screen_name();
-        String retweeted_avatar = positionCollectionweibo.getRetweeted_avatar_hd();
+        String time = status.getCreated_at();
+        String source = StringUtil.getWeiboSource(status.getSource());
+        String content = status.getText();
+        boolean favorited = status.isFavorited();
+        boolean truncated = status.isTruncated();
+        int reposts_count = status.getReposts_count();
+        int comments_count = status.getComments_count();
+        int attitudes_count = status.getAttitudes_count();
 
         if (holder instanceof ImageViewHolder){
+            UsersBean usersBean = status.getUsersBean();
+            String name = usersBean.getScreen_name();
+            String avatar = usersBean.getAvatar_hd();
             Glide.with(mFragment)
                     .load(avatar)
                     .into(((ImageViewHolder) holder).weibo_image_avatar);
@@ -233,20 +257,14 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
             ((ImageViewHolder) holder).weibo_image_thumbsup.setText(attitudes_count+"");
             ((ImageViewHolder) holder).weibo_image_checkbox.setChecked(favorited);
 
-
-            List<ImageInfo> imageInfo = new ArrayList<ImageInfo>();
-            for (int i = 0; i < mPic_urls.size(); i++) {
-                if (positionCollectionweibo.getIdstr().equals(mPic_urls.get(i))){
-                    ImageInfo imageInfo1 = new ImageInfo();
-                    imageInfo1.setThumbnailUrl(mPic_urls.get(i).getThumbnail_pic());
-                    imageInfo1.setBigImageUrl(mPic_urls.get(i).getThumbnail_pic());
-                    imageInfo.add(imageInfo1);
-                }
-            }
+            List<ImageInfo> pic_urls = status.getPic_urls();
             NineGridView.setImageLoader(new ImageLoader.GlideImageLoader());
             ((ImageViewHolder) holder).weibo_image_ninegridimageview.setAdapter
-                    (new NineGridViewClickAdapter(wcarbo.getContext(),imageInfo));
+                    (new NineGridViewClickAdapter(wcarbo.getContext(),pic_urls));
         } else if (holder instanceof TextViewHolder) {
+            UsersBean usersBean = status.getUsersBean();
+            String name = usersBean.getScreen_name();
+            String avatar = usersBean.getAvatar_hd();
             Glide.with(mFragment)
                     .load(avatar)
                     .into(((TextViewHolder) holder).weibo_text_avatar);
@@ -259,6 +277,9 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
             ((TextViewHolder) holder).weibo_text_thumbsup.setText(attitudes_count+"");
             ((TextViewHolder) holder).weibo_text_collection.setChecked(favorited);
         } else if (holder instanceof RetweetedImageViewHolder){
+            UsersBean usersBean = status.getUsersBean();
+            String name = usersBean.getScreen_name();
+            String avatar = usersBean.getAvatar_hd();
             Glide.with(mFragment)
                     .load(avatar)
                     .into(((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_avatar);
@@ -271,6 +292,20 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_thumbsup.setText(attitudes_count+"");
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_collection.setChecked(favorited);
 
+            Status re_status = status.getRetweeted_status();
+            String retweeted_time = re_status.getCreated_at();
+            String retweeted_text = re_status.getText();
+            String retweeted_source = StringUtil.getWeiboSource(re_status.getSource()) ;
+            Boolean retweeted_favorited = re_status.isFavorited();
+            int retweeted_reposts_count = re_status.getReposts_count();
+            int retweeted_comments_count = re_status.getComments_count();
+            int retweeted_attiudes_count = re_status.getAttitudes_count();
+            List<ImageInfo> re_pic_urls = re_status.getPic_urls();
+
+            UsersBean re_usersBean = re_status.getUsersBean();
+            String retweeted_name = re_usersBean.getScreen_name();
+            String retweeted_avatar = re_usersBean.getAvatar_hd();
+
             Glide.with(mFragment)
                     .load(retweeted_avatar)
                     .into(((RetweetedImageViewHolder) holder).weibo_iamge_avatar_retweeted);
@@ -281,19 +316,13 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
             ((RetweetedImageViewHolder) holder).weibo_iamge_forward_retweeted.setText(retweeted_reposts_count + "");
             ((RetweetedImageViewHolder) holder).weibo_iamge_comment_retweeted.setText(retweeted_comments_count + "");
             ((RetweetedImageViewHolder) holder).weibo_iamge_thumbsup_retweeted.setText(retweeted_attiudes_count+"");
-            List<ImageInfo> imageInfo = new ArrayList<ImageInfo>();
-            for (int i = 0; i < mPic_urls.size(); i++) {
-                if (positionCollectionweibo.getIdstr().equals(mPic_urls.get(i))){
-                    ImageInfo imageInfo1 = new ImageInfo();
-                    imageInfo1.setThumbnailUrl(mPic_urls.get(i).getRetweedted_pic());
-                    imageInfo1.setBigImageUrl(mPic_urls.get(i).getRetweedted_pic());
-                    imageInfo.add(imageInfo1);
-                }
-            }
             NineGridView.setImageLoader(new ImageLoader.GlideImageLoader());
             ((RetweetedImageViewHolder) holder).weibo_image_ninegridimageview_retweeted.setAdapter
-                    (new NineGridViewClickAdapter(wcarbo.getContext(),imageInfo));
+                    (new NineGridViewClickAdapter(wcarbo.getContext(),re_pic_urls));
         } else if (holder instanceof  RetwwetedTextViewHolder){
+            UsersBean usersBean = status.getUsersBean();
+            String name = usersBean.getScreen_name();
+            String avatar = usersBean.getAvatar_hd();
             Glide.with(mFragment)
                     .load(avatar)
                     .into(((RetwwetedTextViewHolder) holder).retweeted_weibo_text_avatar);
@@ -306,6 +335,19 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_thumbsup.setText(attitudes_count+"");
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_collection.setChecked(favorited);
 
+            Status re_status = status.getRetweeted_status();
+            String retweeted_time = re_status.getCreated_at();
+            String retweeted_text = re_status.getText();
+            String retweeted_source = StringUtil.getWeiboSource(re_status.getSource()) ;
+            Boolean retweeted_favorited = re_status.isFavorited();
+            int retweeted_reposts_count = re_status.getReposts_count();
+            int retweeted_comments_count = re_status.getComments_count();
+            int retweeted_attiudes_count = re_status.getAttitudes_count();
+
+            UsersBean re_usersBean = re_status.getUsersBean();
+            String retweeted_name = re_usersBean.getScreen_name();
+            String retweeted_avatar = re_usersBean.getAvatar_hd();
+
             Glide.with(mFragment)
                     .load(retweeted_avatar)
                     .into(((RetwwetedTextViewHolder) holder).weibo_text_avatar_retweeted);
@@ -316,36 +358,60 @@ public class collection_list_adapter extends RecyclerView.Adapter<RecyclerView.V
             ((RetwwetedTextViewHolder) holder).weibo_text_forward_retweeted.setText(retweeted_reposts_count+"");
             ((RetwwetedTextViewHolder) holder).weibo_text_comment_retweeted.setText(retweeted_comments_count+"");
             ((RetwwetedTextViewHolder) holder).weibo_text_thumbsup_retweeted.setText(retweeted_attiudes_count+"");
+        } else if (holder instanceof DeletedViewHolder){
+            ((DeletedViewHolder) holder).deleted_text.setText(content);
+        } else if (holder instanceof RetweetedDeletedViewHolder){
+            UsersBean usersBean = status.getUsersBean();
+            String name = usersBean.getScreen_name();
+            String avatar = usersBean.getAvatar_hd();
+            Glide.with(mFragment)
+                    .load(avatar)
+                    .into(((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_avatar);
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_name.setText(name);
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_time.setText(time);
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_source.setText(source);
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_contnet_text.setText(content);
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_forward.setText(reposts_count+"");
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_comment.setText(comments_count+"");
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_thumbsup.setText(attitudes_count+"");
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_collection.setChecked(favorited);
+
+            Status re_status = status.getRetweeted_status();
+            String retweeted_text = re_status.getText();
+            ((RetweetedDeletedViewHolder) holder).weibo_deleted_text_retweeted.setText(retweeted_text);
         }
     }
 
     @Override
     public int getItemCount() {
-        return mcollectionweiboList.size();
+        return mfavoritesBeans.size();
     }
 
-    private void init_userpager(int position){
-        String screen_name = mcollectionweiboList.get(position).getScreen_name();
-        String token = ((wcarbo)mFragment.getActivity().getApplication()).getToken();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(Utility.usersBean(url,token,screen_name)).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
+    /**
+     *
+     * @param position
+     */
+    private void userpager(int position){
+        UsersBean usersBean = mfavoritesBeans.get(position).getStatus().getUsersBean();
+        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
+        bundle.putSerializable("UserBean",usersBean);
+        intent.putExtras(bundle);
+        mFragment.startActivity(intent);
+    }
 
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData = response.body().string();
-                Gson gson = new Gson();
-                UsersBean usersBean = gson.fromJson(responseData,UsersBean.class);
-                Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
-                bundle.putSerializable("UserBean",usersBean);
-                intent.putExtras(bundle);
-                mFragment.startActivity(intent);
-            }
-        });
+    /**
+     *
+     * @param position
+     */
+    private void re_userpager(int position){
+        UsersBean usersBean = mfavoritesBeans.get(position).getStatus().getRetweeted_status().getUsersBean();
+        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
+        bundle.putSerializable("UserBean",usersBean);
+        intent.putExtras(bundle);
+        mFragment.startActivity(intent);
     }
 }
