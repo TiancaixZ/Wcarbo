@@ -1,5 +1,7 @@
 package com.example.chenguozhen.wcarbo.Bean;
 
+import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+
 import java.util.List;
 
 /**

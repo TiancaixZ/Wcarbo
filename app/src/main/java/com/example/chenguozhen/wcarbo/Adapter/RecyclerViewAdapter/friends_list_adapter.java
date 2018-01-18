@@ -1,4 +1,4 @@
-package com.example.chenguozhen.wcarbo.Fragment_weibo_friends;
+package com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;

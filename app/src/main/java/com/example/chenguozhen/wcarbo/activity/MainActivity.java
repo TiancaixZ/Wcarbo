@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.chenguozhen.wcarbo.R;
-import com.example.chenguozhen.wcarbo.viewpaperAdapter.ViewPaerFragmentPagerAdapter;
+import com.example.chenguozhen.wcarbo.Adapter.viewpaperAdapter.ViewPaerFragmentPagerAdapter;
 
 import com.example.chenguozhen.wcarbo.wcarbo;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter.friends_list_adapter;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Frindes;
 import com.example.chenguozhen.wcarbo.utils.Utility;

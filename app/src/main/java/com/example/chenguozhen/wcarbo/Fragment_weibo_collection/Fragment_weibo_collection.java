@@ -8,14 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter.collection_list_adapter;
 import com.example.chenguozhen.wcarbo.Bean.Favorites;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Collectionweibo;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Collectionweibo_Pic_urls;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.utils.JSONUitily;
 import com.example.chenguozhen.wcarbo.utils.Utility;

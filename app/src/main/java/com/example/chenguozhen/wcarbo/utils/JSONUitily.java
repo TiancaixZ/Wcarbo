@@ -8,7 +8,8 @@ import com.example.chenguozhen.wcarbo.Bean.JSON.Frindes;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo_Pic_urls;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Users;
-import com.example.chenguozhen.wcarbo.Bean.Status;
+import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+import com.example.chenguozhen.wcarbo.Bean.Public;
 import com.google.gson.Gson;
 import com.lzy.ninegrid.ImageInfo;
 
@@ -707,13 +708,13 @@ public class JSONUitily {
 
     /**
      *
-     * @param object
+     * @param jsonObject
      * @return
      */
-    public static Status parseJSON_Status(JSONObject object){
+    public static Status parseJSON_Status(JSONObject jsonObject ){
         Status status = new Status();
         try {
-            JSONObject jsonObject = object.getJSONObject("status");
+            //JSONObject jsonObject = object.getJSONObject("status");
             String idstr = jsonObject.getString("idstr");
             status.setIdstr(idstr);
             String created_at = jsonObject.getString("created_at");
@@ -836,7 +837,8 @@ public class JSONUitily {
             for (int i = 0; i < favoritearrays.length(); i++) {
                 JSONObject count = favoritearrays.getJSONObject(i);
                 Favorites.FavoritesBean favoritesBean  = new Favorites.FavoritesBean();
-                Status status = parseJSON_Status(count);
+                JSONObject jsonObject = count.getJSONObject("status");
+                Status status = parseJSON_Status(jsonObject);
                 favoritesBean.setStatus(status);
                 String favorited_time  = count.getString("favorited_time");
                 favoritesBean.setFavorited_time(favorited_time);
@@ -852,6 +854,52 @@ public class JSONUitily {
         }
 
         return favorites;
+    }
+
+    /**
+     *
+     * @param jsondata
+     * @return
+     */
+    public static Public publics(String jsondata){
+        Public publics = new Public();
+        Gson gson = new Gson();
+        try {
+            ArrayList<Status> statusArrayList = new ArrayList<Status>();
+            JSONObject jsonBody = new JSONObject(jsondata);
+            JSONArray statuses = jsonBody.getJSONArray("statuses");
+            for (int i = 0; i < statuses.length(); i++) {
+                JSONObject count = statuses.getJSONObject(i);
+                Status status = parseJSON_Status(count);
+                JSONObject user = count.getJSONObject("user");
+                UsersBean usersBean = gson.fromJson(user.toString(),UsersBean.class);
+                status.setUsersBean(usersBean);
+                if (count.isNull("pic_urls")){
+                    status.setPhoto(false);
+                } else {
+                    status.setPhoto(true);
+                    JSONArray pic_urls = count.getJSONArray("pic_urls");
+                    ArrayList<ImageInfo> pic_urlList = new ArrayList<ImageInfo>();
+                    for (int j = 0; j < pic_urls.length(); j++) {
+                        ImageInfo imageInfo = new ImageInfo();
+                        JSONObject pic_count = pic_urls.getJSONObject(j);
+                        String thumbnail_pic = pic_count.getString("thumbnail_pic");
+                        imageInfo.setThumbnailUrl(thumbnail_pic);
+                        imageInfo.setBigImageUrl(thumbnail_pic);
+                        pic_urlList.add(imageInfo);
+                    }
+                    status.setPic_urls(pic_urlList);
+                }
+                statusArrayList.add(status);
+            }
+
+            publics.setStatuses(statusArrayList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return publics;
     }
 
 }

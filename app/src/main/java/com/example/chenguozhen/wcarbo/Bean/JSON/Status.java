@@ -1,4 +1,4 @@
-package com.example.chenguozhen.wcarbo.Bean;
+package com.example.chenguozhen.wcarbo.Bean.JSON;
 
 import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.lzy.ninegrid.ImageInfo;

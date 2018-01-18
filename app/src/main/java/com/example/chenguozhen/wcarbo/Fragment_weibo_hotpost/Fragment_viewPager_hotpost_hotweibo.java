@@ -12,19 +12,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter.hotweibo_list_adapter;
+import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+import com.example.chenguozhen.wcarbo.Bean.Public;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo;
-import com.example.chenguozhen.wcarbo.utils.Utility;
+import com.example.chenguozhen.wcarbo.utils.JSONUitily;
 import com.example.chenguozhen.wcarbo.wcarbo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by chenguozhen on 2017/9/20.
@@ -33,7 +42,7 @@ import butterknife.ButterKnife;
 public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
 
     private String token;
-    private List<Hotweibo> hotweiboList = new ArrayList();
+    private List<Status> publicList = new ArrayList<Status>();
     private String url = "https://api.weibo.com/2/statuses/public_timeline.json?source=3867086258";
 
     private hotweibo_list_adapter hotweiboListAdapter;
@@ -46,7 +55,7 @@ public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
         super.onCreate(savedInstanceState);
         token = ((wcarbo)getActivity().getApplication()).getToken();
 
-        new QueryHotweibo().execute(url);
+        new QueryPublicweibo().execute(url);
     }
 
     @Nullable
@@ -59,7 +68,7 @@ public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView_hotpost_hotweibo.setLayoutManager(linearLayoutManager);
         hotweiboListAdapter  = new hotweibo_list_adapter
-                (hotweiboList,Fragment_viewPager_hotpost_hotweibo.this);
+                (publicList,Fragment_viewPager_hotpost_hotweibo.this);
         recyclerView_hotpost_hotweibo.setAdapter(hotweiboListAdapter);
         recyclerView_hotpost_hotweibo.addItemDecoration
                 (new DividerItemDecoration(wcarbo.getContext(),DividerItemDecoration.VERTICAL));
@@ -67,7 +76,6 @@ public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
         swipeRefreshLayout_hotpost_hotweibo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new QueryHotweibo().execute(url);
                 swipeRefreshLayout_hotpost_hotweibo.setRefreshing(false);
             }
         });
@@ -75,39 +83,40 @@ public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
         return view;
     }
 
-    private class QueryHotweibo extends AsyncTask<String,Integer,List>{
+    private class QueryPublicweibo extends AsyncTask<String,Integer,Boolean> {
+        private List<com.example.chenguozhen.wcarbo.Bean.JSON.Status> statusList =
+                new ArrayList<com.example.chenguozhen.wcarbo.Bean.JSON.Status>();
 
         @Override
-        protected List doInBackground(String... strings) {
-            String url = strings[0];
-            Utility.queryHotweibo(url,token);
-            List list = Hotweibo_list_add();
-            return list;
+        protected Boolean doInBackground(String... strings) {
+            final String url = strings[0];
+            final OkHttpClient client = new OkHttpClient();
+            HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+            builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,token);
+            Request request = new Request.Builder()
+                    .url(builder.build())
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                String responseData  = response.body().string();
+                Public publics = JSONUitily.publics(responseData);
+                List<com.example.chenguozhen.wcarbo.Bean.JSON.Status> statuses = publics.getStatuses();
+                statusList.addAll(statuses);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return true;
         }
 
         @Override
-        protected void onPostExecute(List list) {
-            super.onPostExecute(list);
-            hotweiboList.addAll(list);
-            hotweiboListAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private List<Hotweibo> Hotweibo_list_add(){
-        List<Hotweibo> hotweiboList1 = DataSupport.findAll(Hotweibo.class);
-        List<Integer> tmp = new ArrayList<Integer>();
-        if (hotweiboList1.size() > hotweiboList.size()){
-            for (int i = 0; i < hotweiboList.size(); i++) {
-                if (hotweiboList.get(i).getIdstr().equals(hotweiboList1.get(i).getIdstr())){
-                    tmp.add(i);
-                }
-            }
-            for (int i = 0; i < tmp.size(); i++) {
-                hotweiboList1.remove(i);
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (aBoolean){
+                publicList.addAll(statusList);
+                hotweiboListAdapter.notifyDataSetChanged();
             }
         }
-        Collections.reverse(hotweiboList1);
-        return hotweiboList1;
     }
 
 }
