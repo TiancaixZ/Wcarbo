@@ -41,12 +41,6 @@ public class FragmentFactory {
                 bundle.putSerializable("fridnes", ClickButtonActivity.frindes);
                 fragment.setArguments(bundle);
                 break;
-            case R.id.weibo_image_avatar:
-                fragment = new Fragment_userpager();
-                Bundle bundle_hotweibo_avatar = new Bundle();
-                bundle_hotweibo_avatar.putSerializable("hotweibo",ClickButtonActivity.hotweibo);
-                fragment.setArguments(bundle_hotweibo_avatar);
-                break;
             case Constants.collection_usepager:
                 fragment = new Fragment_userpager();
                 Bundle bundle1 = new Bundle();

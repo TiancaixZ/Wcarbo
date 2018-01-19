@@ -1,5 +1,7 @@
 package com.example.chenguozhen.wcarbo.Adapter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+import com.example.chenguozhen.wcarbo.Constants;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.DeletedViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.ImageViewHolder;
@@ -17,6 +20,7 @@ import com.example.chenguozhen.wcarbo.RecyclerView.Holder.RetweetedImageViewHold
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.RetwwetedTextViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.TextViewHolder;
 
+import com.example.chenguozhen.wcarbo.activity.ClickButtonActivity;
 import com.example.chenguozhen.wcarbo.utils.ImageLoader;
 import com.example.chenguozhen.wcarbo.utils.StringUtil;
 import com.example.chenguozhen.wcarbo.wcarbo;
@@ -84,7 +88,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
 
                 }
             });
@@ -92,7 +96,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             return holder;
@@ -104,14 +108,14 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             holder.weibo_text_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             return holder;
@@ -123,28 +127,28 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             holder.retweeted_weibo_iamge_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             holder.weibo_iamge_avatar_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    re_userpage(position);
+                    userpage(re_usersBean(position));
                 }
             });
             holder.weibo_iamge_name_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    re_userpage(position);
+                    userpage(re_usersBean(position));
                 }
             });
             return holder;
@@ -156,28 +160,28 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             holder.retweeted_weibo_text_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             holder.weibo_text_avatar_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                   re_userpage(position);
+                    userpage(re_usersBean(position));
                 }
             });
             holder.weibo_text_name_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    re_userpage(position);
+                    userpage(re_usersBean(position));
                 }
             });
             return holder;
@@ -194,14 +198,14 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             holder.retweeted_weibo_deleted_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(position);
+                    userpage(usersBean(position));
                 }
             });
             return holder;
@@ -369,14 +373,24 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         return mDataList.size();
     }
 
-    protected void userpage(int position) {
-    }
-
-    protected void re_userpage(int position) {
+    private void userpage(UsersBean usersBean) {
+        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
+        bundle.putSerializable("UserBean",usersBean);
+        intent.putExtras(bundle);
+        mFragment.startActivity(intent);
     }
 
     protected Status PositionStatus(int position){
         return null;
     }
 
+    protected UsersBean usersBean(int position){
+        return null;
+    }
+
+    protected UsersBean re_usersBean(int position){
+        return  null;
+    }
 }

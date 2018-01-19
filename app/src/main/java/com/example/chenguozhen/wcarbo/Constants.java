@@ -43,4 +43,5 @@ public interface Constants {
     // public static final String SCOPE = null;
 
     public static final int collection_usepager = 0;
+
 }

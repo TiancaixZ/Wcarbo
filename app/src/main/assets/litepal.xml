@@ -2,15 +2,11 @@
 
     <dbname value="wcarbodb" />
 
-    <version value="5" ></version>
+    <version value="6" ></version>
 
     <list>
         <mapping class = "com.example.chenguozhen.wcarbo.Bean.JSON.Frindes"></mapping>
         <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Users"></mapping>
-        <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo"></mapping>
-        <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo_Pic_urls"></mapping>
-        <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Collectionweibo"></mapping>
-        <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Collectionweibo_Pic_urls"></mapping>
         <mapping class="com.example.chenguozhen.wcarbo.Bean.Gson.emotions"></mapping>
     </list>
 

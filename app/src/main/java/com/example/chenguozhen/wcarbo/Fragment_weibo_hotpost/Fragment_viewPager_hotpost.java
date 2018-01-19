@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.chenguozhen.wcarbo.Adapter.viewpaperAdapter.hotpost_fragment_adapter;
 import com.example.chenguozhen.wcarbo.R;
-import com.example.chenguozhen.wcarbo.Adapter.viewpaperAdapter.ViewPagerFragmentAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,8 +27,15 @@ public class Fragment_viewPager_hotpost extends Fragment {
     @BindView(R.id.tablayout)TabLayout Hotpost_TableLayout;
     @BindView(R.id.framgent_hotpost_viewpaper) ViewPager hotpostview;
 
-    public static final int Hotpost_hotweibo = 0;
-    public static final int Hotpost_hottopic = 1;
+    private List<Fragment> fragmentList = new ArrayList<Fragment>();
+    private List<String> stringList = new ArrayList<String>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initData();
+    }
 
     @Nullable
     @Override
@@ -33,12 +43,21 @@ public class Fragment_viewPager_hotpost extends Fragment {
         View view = inflater.inflate(R.layout.layout_fragment_hotpost,container,false);
         ButterKnife.bind(this, view);
 
-        ViewPagerFragmentAdapter  adapter = new ViewPagerFragmentAdapter(getChildFragmentManager());
+        hotpost_fragment_adapter adapter = new hotpost_fragment_adapter(getChildFragmentManager(),fragmentList,stringList);
         hotpostview.setAdapter(adapter);
-        hotpostview.setCurrentItem(Hotpost_hotweibo);
+        hotpostview.setCurrentItem(0);
         Hotpost_TableLayout.setupWithViewPager(hotpostview);
 
         return view;
+    }
+
+    /** **/
+    private void initData(){
+        stringList.add("热门微博");
+        stringList.add("热门话题");
+
+        fragmentList.add(new Fragment_viewPager_hotpost_hotweibo());
+        fragmentList.add(new Fragment_viewPager_hotpost_hottopic());
     }
 
 }

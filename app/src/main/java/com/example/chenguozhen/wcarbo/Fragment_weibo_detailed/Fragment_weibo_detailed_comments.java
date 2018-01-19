@@ -1,20 +1,13 @@
-package com.example.chenguozhen.wcarbo.Fragment_weibo_collection;
+package com.example.chenguozhen.wcarbo.Fragment_weibo_detailed;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter.collection_list_adapter;
+import com.example.chenguozhen.wcarbo.Bean.Comments;
 import com.example.chenguozhen.wcarbo.Bean.Favorites;
-import com.example.chenguozhen.wcarbo.R;
+import com.example.chenguozhen.wcarbo.Bean.JSON.Comment;
 import com.example.chenguozhen.wcarbo.module.base.BaseListFragment;
 import com.example.chenguozhen.wcarbo.utils.JSONUitily;
 import com.example.chenguozhen.wcarbo.utils.Utility;
@@ -25,8 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,23 +26,24 @@ import okhttp3.Response;
 import static com.example.chenguozhen.wcarbo.utils.Utility.Pagecount;
 
 /**
- * Created by chenguozhen on 2018/1/2.
+ * Created by chenguozhen on 2018/1/18.
  */
 
-public class Fragment_weibo_collection extends BaseListFragment{
+public class Fragment_weibo_detailed_comments extends BaseListFragment{
 
     private String token;
-    private String url ="https://api.weibo.com/2/favorites.json?source=3867086258";
-    private List<Favorites.FavoritesBean> favoritesBeans = new ArrayList<Favorites.FavoritesBean>();
-    private collection_list_adapter collectionListAdapter;
-    private weiboAsyncTask weiboAsyncTask;
+    private String url = "https://api.weibo.com/2/comments/show.json?source=3867086258";
+    private List<Comment> commentsList = new ArrayList<Comment>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = ((wcarbo)getActivity().getApplication()).getToken();
-        weiboAsyncTask = new weiboAsyncTask();
-        weiboAsyncTask.execute(url);
+    }
+
+    @Override
+    protected void SwipeRefresh_Refresh() {
+        super.SwipeRefresh_Refresh();
     }
 
     public class weiboAsyncTask extends AsyncTask<String,Integer,Boolean> {
@@ -64,6 +56,8 @@ public class Fragment_weibo_collection extends BaseListFragment{
             final OkHttpClient client = new OkHttpClient();
             HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
             builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,token);
+            builder.addQueryParameter("count",String.valueOf(50));
+            
             Request request = new Request.Builder()
                     .url(builder.build())
                     .build();
@@ -100,15 +94,8 @@ public class Fragment_weibo_collection extends BaseListFragment{
     }
 
     @Override
-    protected void SwipeRefresh_Refresh() {
-        super.SwipeRefresh_Refresh();
-
-    }
-
-    @Override
     protected RecyclerView.Adapter adapter() {
-        collectionListAdapter = new collection_list_adapter(favoritesBeans,Fragment_weibo_collection.this);
-        return collectionListAdapter;
+
+        return super.adapter();
     }
 }
-

@@ -12,7 +12,6 @@ import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.example.chenguozhen.wcarbo.utils.FragmentFactory;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Frindes;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +26,6 @@ public class ClickButtonActivity extends AppCompatActivity {
     public FragmentTransaction fragmentTransaction;
 
     public static Frindes frindes;
-    public static Hotweibo hotweibo;
     public static UsersBean usersBean;
 
 
@@ -45,7 +43,6 @@ public class ClickButtonActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         int resId = bundle.getInt(EXTRA_CLICKBUTTONACTIVITY);
         frindes = (Frindes) bundle.getSerializable("frindes");
-        hotweibo = (Hotweibo) bundle.getSerializable("hotweibo");
         usersBean = (UsersBean) bundle.getSerializable("UserBean");
 
         fragmentManager = getSupportFragmentManager();

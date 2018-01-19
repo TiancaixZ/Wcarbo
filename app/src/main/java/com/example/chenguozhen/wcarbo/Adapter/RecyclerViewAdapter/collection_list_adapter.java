@@ -30,27 +30,15 @@ public class collection_list_adapter extends BaseListAdapter<Favorites.Favorites
     }
 
     @Override
-    protected void userpage(int position) {
-        super.userpage(position);
+    protected UsersBean usersBean(int position) {
         UsersBean usersBean = mfavoritesBeans.get(position).getStatus().getUsersBean();
-        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
-        bundle.putSerializable("UserBean",usersBean);
-        intent.putExtras(bundle);
-        mFragment.startActivity(intent);
+        return usersBean;
     }
 
     @Override
-    protected void re_userpage(int position) {
-        super.re_userpage(position);
+    protected UsersBean re_usersBean(int position) {
         UsersBean usersBean = mfavoritesBeans.get(position).getStatus().getRetweeted_status().getUsersBean();
-        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
-        bundle.putSerializable("UserBean",usersBean);
-        intent.putExtras(bundle);
-        mFragment.startActivity(intent);
+        return usersBean;
     }
 
     @Override

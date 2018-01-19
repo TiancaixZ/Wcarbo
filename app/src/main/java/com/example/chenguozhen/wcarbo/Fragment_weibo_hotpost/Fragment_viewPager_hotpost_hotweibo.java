@@ -16,16 +16,13 @@ import com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter.hotweibo_list_
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
 import com.example.chenguozhen.wcarbo.Bean.Public;
 import com.example.chenguozhen.wcarbo.R;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo;
+import com.example.chenguozhen.wcarbo.module.base.BaseListFragment;
 import com.example.chenguozhen.wcarbo.utils.JSONUitily;
 import com.example.chenguozhen.wcarbo.wcarbo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
-import org.litepal.crud.DataSupport;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,7 +36,7 @@ import okhttp3.Response;
  * Created by chenguozhen on 2017/9/20.
  */
 
-public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
+public class Fragment_viewPager_hotpost_hotweibo extends BaseListFragment{
 
     private String token;
     private List<Status> publicList = new ArrayList<Status>();
@@ -47,40 +44,12 @@ public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
 
     private hotweibo_list_adapter hotweiboListAdapter;
 
-    @BindView(R.id.recyclerview_hotpost_hotweibo) RecyclerView recyclerView_hotpost_hotweibo;
-    @BindView(R.id.swiperefresh_hotpost_hotweibo) SwipeRefreshLayout swipeRefreshLayout_hotpost_hotweibo;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = ((wcarbo)getActivity().getApplication()).getToken();
 
         new QueryPublicweibo().execute(url);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_hotpost_hotweibo,container,false);
-
-        ButterKnife.bind(this, view);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView_hotpost_hotweibo.setLayoutManager(linearLayoutManager);
-        hotweiboListAdapter  = new hotweibo_list_adapter
-                (publicList,Fragment_viewPager_hotpost_hotweibo.this);
-        recyclerView_hotpost_hotweibo.setAdapter(hotweiboListAdapter);
-        recyclerView_hotpost_hotweibo.addItemDecoration
-                (new DividerItemDecoration(wcarbo.getContext(),DividerItemDecoration.VERTICAL));
-
-        swipeRefreshLayout_hotpost_hotweibo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout_hotpost_hotweibo.setRefreshing(false);
-            }
-        });
-
-        return view;
     }
 
     private class QueryPublicweibo extends AsyncTask<String,Integer,Boolean> {
@@ -117,6 +86,19 @@ public class Fragment_viewPager_hotpost_hotweibo extends Fragment{
                 hotweiboListAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    protected void SwipeRefresh_Refresh() {
+        super.SwipeRefresh_Refresh();
+        new QueryPublicweibo().execute(url);
+    }
+
+    @Override
+    protected RecyclerView.Adapter adapter() {
+        hotweiboListAdapter  = new hotweibo_list_adapter
+                (publicList,Fragment_viewPager_hotpost_hotweibo.this);
+        return hotweiboListAdapter;
     }
 
 }

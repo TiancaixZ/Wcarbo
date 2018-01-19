@@ -2,19 +2,12 @@ package com.example.chenguozhen.wcarbo.utils;
 
 import android.util.Log;
 
-import com.example.chenguozhen.wcarbo.Bean.JSON.Collectionweibo;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Collectionweibo_Pic_urls;
-import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.example.chenguozhen.wcarbo.Bean.Gson.test;
-import com.example.chenguozhen.wcarbo.data.CollectionData;
-import com.example.chenguozhen.wcarbo.data.Collection_Pic_urls_Data;
 import com.example.chenguozhen.wcarbo.data.FriendsData;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -70,34 +63,6 @@ public class Utility {
             }
         });
 
-    }
-
-    /**
-     * 查询Hotweibo api（）
-     * @param url
-     * @param access_token
-     */
-    public static void queryHotweibo(String url, String access_token){
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
-        builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
-
-        Request request = new Request.Builder()
-                .url(builder.build())
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("friends send","干他妈的获取失败");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData = response.body().string();
-                JSONUitily.paerseJSON_Hotweibo(responseData);
-            }
-        });
     }
 
     public static int Pagecount(String jsondata){

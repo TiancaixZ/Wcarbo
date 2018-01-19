@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Frindes;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Hotweibo;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Users;
 import com.example.chenguozhen.wcarbo.utils.Utility;
 import com.example.chenguozhen.wcarbo.wcarbo;
@@ -38,7 +37,6 @@ public class Fragment_userpager extends Fragment{
     private String uId;
     private String url = "https://api.weibo.com/2/users/show.json?source=3867086258";
     private Frindes frindes;
-    private Hotweibo hotweibo;
     private UsersBean usersBean;
 
     @BindView(R.id.usepager_circleimage) CircleImageView usepager_circleimage;
@@ -53,7 +51,6 @@ public class Fragment_userpager extends Fragment{
 
     public static final int UPDATE_USEPAGER = 1;
     public static final int UPDATE_FRINDESPAGER = 2;
-    public static final int UPDATE_HOTWEIBOPAGER = 3;
     public static final int UPDATE_USERBEAN = 4;
 
     private Handler handler = new Handler(){
@@ -67,9 +64,6 @@ public class Fragment_userpager extends Fragment{
                     break;
                 case UPDATE_FRINDESPAGER:
                     setUpdateFrindespager(frindes);
-                    break;
-                case UPDATE_HOTWEIBOPAGER:
-                    setUpdateHotweibopager(hotweibo);
                     break;
                 case UPDATE_USERBEAN:
                     setUpdateUserbeanpager(usersBean);
@@ -103,9 +97,6 @@ public class Fragment_userpager extends Fragment{
             } else if (getArguments().getSerializable("fridnes") != null){
                 frindes = (Frindes) getArguments().getSerializable("fridnes");
                 doBackFrindespager();
-            } else if (getArguments().getSerializable("hotweibo") != null){
-                hotweibo = (Hotweibo) getArguments().getSerializable("hotweibo");
-                doBackHotweibopager();
             } else if (getArguments().getSerializable("userbean") !=null){
                 usersBean = (UsersBean) getArguments().getSerializable("userbean");
                 doBackWeiboUserweibopager();
@@ -166,32 +157,6 @@ public class Fragment_userpager extends Fragment{
     }
 
     /**
-     * 更新View(Hotweibo)
-     * @param hotweibo
-     */
-    private void setUpdateHotweibopager(Hotweibo hotweibo){
-        Glide.with(Fragment_userpager.this)
-                .load(hotweibo.getAvatar_hd())
-                .into(usepager_circleimage);
-
-        usepager_name.setText(hotweibo.getScreen_name());
-
-        if (hotweibo.getGender().equals("f")){
-            usepager_gender.setImageResource(R.drawable.women);
-        }
-
-        usepager_profile.setText(hotweibo.getDescription());
-
-        usepager_location.setText(hotweibo.getLocation());
-
-        usepager_contion.setText(hotweibo.getProfile_iamge_url());
-
-        usepager_attention.setText(hotweibo.getFrindes_count()+ "");
-
-        usepager_follower.setText(hotweibo.getFoolowers_count()+ "");
-    }
-
-    /**
      * 更新View(UsersBean)
      * @param usersBean
      */
@@ -235,15 +200,6 @@ public class Fragment_userpager extends Fragment{
     private void doBackFrindespager(){
         Message message = Message.obtain();
         message.what = UPDATE_FRINDESPAGER;
-        handler.sendMessage(message);
-    }
-
-    /**
-     * 后台处理数据发送message(Hotweibo)
-     */
-    private void doBackHotweibopager(){
-        Message message = Message.obtain();
-        message.what = UPDATE_HOTWEIBOPAGER;
         handler.sendMessage(message);
     }
 
