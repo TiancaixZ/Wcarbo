@@ -30,18 +30,6 @@ public class collection_list_adapter extends BaseListAdapter<Favorites.Favorites
     }
 
     @Override
-    protected UsersBean usersBean(int position) {
-        UsersBean usersBean = mfavoritesBeans.get(position).getStatus().getUsersBean();
-        return usersBean;
-    }
-
-    @Override
-    protected UsersBean re_usersBean(int position) {
-        UsersBean usersBean = mfavoritesBeans.get(position).getStatus().getRetweeted_status().getUsersBean();
-        return usersBean;
-    }
-
-    @Override
     protected Status PositionStatus(int position) {
         Status status = mfavoritesBeans.get(position).getStatus();
         return status;

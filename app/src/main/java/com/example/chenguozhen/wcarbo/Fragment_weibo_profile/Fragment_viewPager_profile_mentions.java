@@ -1,4 +1,4 @@
-package com.example.chenguozhen.wcarbo.Fragment_weibo_detailed;
+package com.example.chenguozhen.wcarbo.Fragment_weibo_profile;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,60 +26,48 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by chenguozhen on 2018/1/18.
+ * Created by chenguozhen on 2018/1/25.
  */
 
-public class Fragment_weibo_detailed_comments extends BaseListFragment{
-
+public class Fragment_viewPager_profile_mentions extends BaseListFragment {
     private String token;
-    private String detial_idstr;
     private long max_id = 0;
-    private String url = "https://api.weibo.com/2/comments/show.json?source=3867086258";
+    private String url = "https://api.weibo.com/2/comments/mentions.json?source=3867086258";
     private List<Comment> commentsList = new ArrayList<Comment>();
     private comment_list_adapter adapter;
-    private CommentAsyncTask asyncTask;
-
-    public static Fragment_weibo_detailed_comments newInstance(String detial_idstr){
-        Bundle args = new Bundle();
-        args.putString("detail",detial_idstr);
-
-        Fragment_weibo_detailed_comments fragment_weibo_detailed_comments = new Fragment_weibo_detailed_comments();
-        fragment_weibo_detailed_comments.setArguments(args);
-        return fragment_weibo_detailed_comments;
-    }
+    private MentionsAsyncTask asyncTask;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = ((wcarbo)getActivity().getApplication()).getToken();
-        detial_idstr = getArguments().getString("detail");
-        Log.d("commentaa",detial_idstr);
-        asyncTask = new CommentAsyncTask(commentsList,getActivity(),BaseAsyncTask.create);
-        asyncTask.execute(url);
-    }
 
-    @Override
-    public RecyclerView.Adapter adapter() {
-        adapter = new comment_list_adapter(commentsList,Fragment_weibo_detailed_comments.this);
-        return adapter;
-    }
-
-    @Override
-    protected void ScrollListener_LoadMore() {
-        asyncTask = new CommentAsyncTask(commentsList,getActivity(),BaseAsyncTask.scroll);
+        asyncTask = new MentionsAsyncTask(commentsList,getActivity(), BaseAsyncTask.create);
         asyncTask.execute(url);
     }
 
     @Override
     protected void SwipeRefresh_Refresh() {
-        asyncTask = new CommentAsyncTask(commentsList,getActivity(),BaseAsyncTask.swipe);
+        asyncTask = new MentionsAsyncTask(commentsList,getActivity(),BaseAsyncTask.swipe);
         asyncTask.execute(url);
     }
 
-    private class CommentAsyncTask extends BaseAsyncTask<Comment> {
+    @Override
+    protected void ScrollListener_LoadMore() {
+        asyncTask = new MentionsAsyncTask(commentsList,getActivity(),BaseAsyncTask.scroll);
+        asyncTask.execute(url);
+    }
 
-        public CommentAsyncTask(List<Comment> DataList, FragmentActivity fragment, int type) {
-            super(DataList, fragment, type);
+    @Override
+    public RecyclerView.Adapter adapter() {
+        adapter = new comment_list_adapter(commentsList,Fragment_viewPager_profile_mentions.this);
+        return adapter;
+    }
+
+    private class MentionsAsyncTask extends BaseAsyncTask<Comment>{
+
+        public MentionsAsyncTask(List<Comment> DataList, FragmentActivity fragmentActivity, int type) {
+            super(DataList, fragmentActivity, type);
         }
 
         @Override
@@ -88,16 +76,16 @@ public class Fragment_weibo_detailed_comments extends BaseListFragment{
         }
 
         @Override
-        protected List<Comment> cratevoid(String url, OkHttpClient client){
+        protected List<Comment> cratevoid(String url, OkHttpClient client) {
             List<Comment> commentList = new ArrayList<Comment>();
-            Request request = Utility.budiler(url,max_id,token,detial_idstr);
-            Log.d("commentaa",request.toString());
+            Request request = Utility.byme_builder(url,max_id,token);
             try {
                 Response response = client.newCall(request).execute();
                 String responseData = response.body().string();
-
                 Comments comment = JSONUitily.comments(responseData);
-                commentList.addAll(comment.getComments());
+                if (comment.getComments() != null){
+                    commentList = comment.getComments();
+                }
                 max_id = comment.getNext_cursor();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -108,33 +96,32 @@ public class Fragment_weibo_detailed_comments extends BaseListFragment{
         @Override
         protected List<Comment> scrollvoid(String url, OkHttpClient client) {
             List<Comment> commentList = new ArrayList<Comment>();
-            Request request = Utility.budiler(url,max_id,token,detial_idstr);
+            Request request = Utility.byme_builder(url,max_id,token);
             try {
                 Response response = client.newCall(request).execute();
-                String responseData  = response.body().string();
-                Comments comment =JSONUitily.comments(responseData);
-                List<Comment> comments = comment.getComments();
-                if (max_id != 0){
-                    commentList.addAll(comments);
+                String responseData = response.body().string();
+                Comments comment = JSONUitily.comments(responseData);
+                if (comment.getComments() != null && max_id != 0){
+                    commentList = comment.getComments();
                 }
                 max_id = comment.getNext_cursor();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return commentList;
         }
 
         @Override
         protected List<Comment> swipevoid(String url, OkHttpClient client) {
-            max_id = 0;
             List<Comment> commentList = new ArrayList<Comment>();
-            Request request = Utility.budiler(url,max_id,token,detial_idstr);
+            Request request = Utility.byme_builder(url,max_id,token);
             try {
                 Response response = client.newCall(request).execute();
                 String responseData = response.body().string();
                 Comments comment = JSONUitily.comments(responseData);
-                commentList.addAll(comment.getComments());
+                if (comment.getComments() != null){
+                    commentList = comment.getComments();
+                }
                 max_id = comment.getNext_cursor();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -143,5 +130,4 @@ public class Fragment_weibo_detailed_comments extends BaseListFragment{
         }
 
     }
-
 }

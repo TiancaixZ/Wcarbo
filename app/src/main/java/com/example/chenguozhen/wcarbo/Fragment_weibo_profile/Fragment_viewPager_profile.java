@@ -1,38 +1,33 @@
 package com.example.chenguozhen.wcarbo.Fragment_weibo_profile;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.chenguozhen.wcarbo.R;
+
+import com.example.chenguozhen.wcarbo.module.base.BaseTabViewpagerFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chenguozhen on 2017/9/25.
  */
 
-public class Fragment_viewPager_profile extends Fragment {
+public class Fragment_viewPager_profile extends BaseTabViewpagerFragment {
 
-    private TabLayout profiletabLayout;
-    private ViewPager profileviewpager;
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_viewpager_profile,container,false);
+    protected void initData(List<Fragment> fragmentList, List<String> stringList) {
+        fragmentList.add(new Fragment_viewPager_profile_bymecomments());
+        fragmentList.add(new Fragment_viewPager_profile_tomecomments());
+        fragmentList.add(new Fragment_viewPager_profile_mentions());
 
-        profiletabLayout = (TabLayout)view.findViewById(R.id.profile_tablayout);
-
-        profileviewpager = (ViewPager)view.findViewById(R.id.framgent_profile_viewpaper);
-
-        profiletabLayout.setupWithViewPager(profileviewpager);
-
-
-        return view;
+        stringList.add("发出的评论");
+        stringList.add("收到的评论");
+        stringList.add("@我的评论");
     }
+
+    @Override
+    protected int position() {
+        return 0;
+    }
+
 }

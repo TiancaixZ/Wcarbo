@@ -2,6 +2,7 @@ package com.example.chenguozhen.wcarbo;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -26,6 +27,8 @@ public class wcarbo extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        Log.d("TAG", "Max memory is " + maxMemory + "KB");
         LitePal.initialize(this);
         WbSdk.install(this,new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE));
         ReadToken();
@@ -36,6 +39,8 @@ public class wcarbo extends Application{
         }
         LitePal.getDatabase();
         context = getApplicationContext();
+        long time=System.currentTimeMillis();
+        Log.d("TAG",time+"time");
     }
 
     /**

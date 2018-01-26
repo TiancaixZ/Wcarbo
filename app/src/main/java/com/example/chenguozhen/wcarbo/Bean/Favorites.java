@@ -1,6 +1,7 @@
 package com.example.chenguozhen.wcarbo.Bean;
 
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+import com.example.chenguozhen.wcarbo.Bean.Gson.error;
 
 import java.util.List;
 
@@ -11,6 +12,16 @@ import java.util.List;
 public class Favorites {
     private int total_number;
     private List<FavoritesBean> favorites;
+    private error error;
+
+    public error getError(){
+        return error;
+    }
+
+    public void setError(error error){
+        this.error = error;
+
+    }
 
     public static class FavoritesBean {
         private Status status;

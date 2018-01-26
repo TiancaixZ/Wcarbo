@@ -27,9 +27,11 @@ public class ImageViewHolder extends RecyclerView.ViewHolder{
     public Button weibo_image_forward;
     public Button weibo_image_comment;
     public Button weibo_image_thumbsup;
+    public View ImageViewHolder;
 
     public ImageViewHolder(View itemView) {
         super(itemView);
+        ImageViewHolder = itemView;
         weibo_image_avatar = (CircleImageView)itemView.findViewById(R.id.weibo_image_avatar);
         weibo_image_name = (TextView)itemView.findViewById(R.id.weibo_image_name);
         weibo_image_time = (TextView)itemView.findViewById(R.id.weibo_image_time);

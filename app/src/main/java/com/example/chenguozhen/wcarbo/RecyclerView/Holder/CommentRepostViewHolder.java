@@ -9,10 +9,10 @@ import com.example.chenguozhen.wcarbo.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by chenguozhen on 2018/1/19.
+ * Created by chenguozhen on 2018/1/23.
  */
 
-public class WeibobaseViewHolder extends RecyclerView.ViewHolder{
+public class CommentRepostViewHolder extends RecyclerView.ViewHolder{
 
     public CircleImageView avatar;
     public TextView name;
@@ -20,7 +20,7 @@ public class WeibobaseViewHolder extends RecyclerView.ViewHolder{
     public TextView source;
     public TextView content;
 
-    public WeibobaseViewHolder(View itemView) {
+    public CommentRepostViewHolder(View itemView) {
         super(itemView);
         avatar = (CircleImageView)itemView.findViewById(R.id.avatar);
         name = (TextView)itemView.findViewById(R.id.name);

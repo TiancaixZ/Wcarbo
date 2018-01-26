@@ -36,8 +36,11 @@ public class RetweetedImageViewHolder extends RecyclerView.ViewHolder{
     public Button weibo_iamge_comment_retweeted;
     public Button weibo_iamge_thumbsup_retweeted;
 
+    public View RetweetedImageViewHolder;
+
     public RetweetedImageViewHolder(View itemView) {
         super(itemView);
+        RetweetedImageViewHolder = itemView;
         retweeted_weibo_iamge_avatar = (CircleImageView)itemView.findViewById(R.id.retweeted_weibo_iamge_avatar);
         retweeted_weibo_iamge_name = (TextView)itemView.findViewById(R.id.retweeted_weibo_iamge_name);
         retweeted_weibo_iamge_time = (TextView)itemView.findViewById(R.id.retweeted_weibo_iamge_time);

@@ -3,6 +3,7 @@ package com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.example.chenguozhen.wcarbo.Adapter.BaseListAdapter;
 import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
@@ -26,18 +27,6 @@ public class hotweibo_list_adapter extends BaseListAdapter<Status>{
         super(PublicList,fragment);
         this.mPublicList = PublicList;
         this.mFragment = fragment;
-    }
-
-    @Override
-    protected UsersBean usersBean(int position) {
-        UsersBean usersBean = mPublicList.get(position).getUsersBean();
-        return usersBean;
-    }
-
-    @Override
-    protected UsersBean re_usersBean(int position) {
-        UsersBean usersBean = mPublicList.get(position).getRetweeted_status().getUsersBean();
-        return usersBean;
     }
 
     @Override

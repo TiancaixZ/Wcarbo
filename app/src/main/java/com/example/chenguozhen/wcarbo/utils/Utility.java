@@ -65,26 +65,53 @@ public class Utility {
 
     }
 
-    public static int Pagecount(String jsondata){
-        int count = 1;
-        int once = 20;
-            Gson gson = new Gson();
-            test test =gson.fromJson(jsondata,test.class);
-            int total_number = test.getTotal_number();
-            if (total_number % once == 0){
-                count = total_number / once;
-            } else {
-                count = total_number / once + 1;
-
-            }
-
-        return count;
-    }
-
-    public static Request builder(int page,String url,String access_token){
+    /**
+     * 收藏
+     * @param page
+     * @param url
+     * @param access_token
+     * @return
+     */
+    public static Request favouite_builder(int page,String url,String access_token){
         HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
         builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
         builder.addQueryParameter("page", String.valueOf(page));
+        Request request = new Request.Builder()
+                .url(builder.build())
+                .build();
+        return request;
+    }
+
+    /**
+     * 获取当前登录用户所发出的评论列表
+     * @param url
+     * @param max_id
+     * @param access_token
+     * @return
+     */
+    public static Request byme_builder(String url,long max_id,String access_token){
+        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+        builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
+        builder.addQueryParameter("max_id", String.valueOf(max_id));
+        Request request = new Request.Builder()
+                .url(builder.build())
+                .build();
+        return request;
+    }
+
+    /**
+     * 评论
+     * @param url
+     * @param next_cursor
+     * @param access_token
+     * @param idstr
+     * @return
+     */
+    public static Request budiler(String url,long next_cursor,String access_token,String idstr){
+        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+        builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
+        builder.addQueryParameter("id",idstr);
+        builder.addQueryParameter("max_id", String.valueOf(next_cursor));
         Request request = new Request.Builder()
                 .url(builder.build())
                 .build();

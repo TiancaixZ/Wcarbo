@@ -1,7 +1,7 @@
 package com.example.chenguozhen.wcarbo.Bean;
 
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
-import com.google.gson.annotations.SerializedName;
+import com.example.chenguozhen.wcarbo.Bean.Gson.error;
 
 import java.util.List;
 
@@ -26,6 +26,16 @@ public class Public {
     private int total_number;
     private int interval;
     private List<Status> statuses;
+    private error error;
+
+    public error getError(){
+        return error;
+    }
+
+    public void setError(error error){
+        this.error = error;
+
+    }
 
     public boolean isHasvisible() {
         return hasvisible;

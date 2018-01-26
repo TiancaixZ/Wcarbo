@@ -3,30 +3,24 @@ package com.example.chenguozhen.wcarbo.Fragment_weibo_hotpost;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.chenguozhen.wcarbo.Adapter.RecyclerViewAdapter.hotweibo_list_adapter;
+import com.example.chenguozhen.wcarbo.Bean.Gson.error;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
 import com.example.chenguozhen.wcarbo.Bean.Public;
-import com.example.chenguozhen.wcarbo.R;
+import com.example.chenguozhen.wcarbo.TestData;
 import com.example.chenguozhen.wcarbo.module.base.BaseListFragment;
 import com.example.chenguozhen.wcarbo.utils.JSONUitily;
 import com.example.chenguozhen.wcarbo.wcarbo;
+import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -58,6 +52,7 @@ public class Fragment_viewPager_hotpost_hotweibo extends BaseListFragment{
 
         @Override
         protected Boolean doInBackground(String... strings) {
+            boolean result = true;
             final String url = strings[0];
             final OkHttpClient client = new OkHttpClient();
             HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
@@ -75,7 +70,7 @@ public class Fragment_viewPager_hotpost_hotweibo extends BaseListFragment{
                 e.printStackTrace();
             }
 
-            return true;
+            return result;
         }
 
         @Override
@@ -89,16 +84,22 @@ public class Fragment_viewPager_hotpost_hotweibo extends BaseListFragment{
     }
 
     @Override
+    public RecyclerView.Adapter adapter() {
+        hotweiboListAdapter  = new hotweibo_list_adapter
+                (publicList,Fragment_viewPager_hotpost_hotweibo.this);
+        return hotweiboListAdapter;
+    }
+
+    @Override
     protected void SwipeRefresh_Refresh() {
         super.SwipeRefresh_Refresh();
         new QueryPublicweibo().execute(url);
     }
 
     @Override
-    protected RecyclerView.Adapter adapter() {
-        hotweiboListAdapter  = new hotweibo_list_adapter
-                (publicList,Fragment_viewPager_hotpost_hotweibo.this);
-        return hotweiboListAdapter;
+    protected void ScrollListener_LoadMore() {
+        super.ScrollListener_LoadMore();
     }
+
 
 }

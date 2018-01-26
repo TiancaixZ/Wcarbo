@@ -1,4 +1,4 @@
-package com.example.chenguozhen.wcarbo.Adapter;
+package com.example.chenguozhen.wcarbo.Adapter.viewpaperAdapter;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,11 +11,11 @@ import java.util.List;
  * Created by chenguozhen on 2018/1/18.
  */
 
-public abstract class BaseFragmentStatePagerAdapter<T extends Fragment> extends FragmentStatePagerAdapter {
-    List<T> mFragmentList;
+public class BaseFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
+    List<Fragment> mFragmentList;
     List<String> mTitles;
 
-    public BaseFragmentStatePagerAdapter(FragmentManager fm,List<T> FragmentList,List<String> titles) {
+    public BaseFragmentStatePagerAdapter(FragmentManager fm,List<Fragment> FragmentList,List<String> titles) {
         super(fm);
         this.mFragmentList = FragmentList;
         this.mTitles = titles;

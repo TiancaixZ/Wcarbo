@@ -25,9 +25,11 @@ public class TextViewHolder extends RecyclerView.ViewHolder{
     public Button weibo_text_forward;
     public Button weibo_text_comment;
     public Button weibo_text_thumbsup;
+    public View TextViewHolder;
 
     public TextViewHolder(View itemView) {
         super(itemView);
+        TextViewHolder = itemView;
         weibo_text_avatar = (CircleImageView)itemView.findViewById(R.id.weibo_text_avatar);
         weibo_text_name = (TextView)itemView.findViewById(R.id.weibo_text_name);
         weibo_text_time = (TextView)itemView.findViewById(R.id.weibo_text_time);

@@ -1,5 +1,6 @@
 package com.example.chenguozhen.wcarbo.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.Adapter.viewpaperAdapter.ViewPaerFragmentPagerAdapter;
 
 import com.example.chenguozhen.wcarbo.wcarbo;
+import com.example.chenguozhen.wcarbo.widget.loginDialog;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
@@ -38,14 +40,18 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.weibo_image_cardview) ImageButton weibo_image_cardview;
     @BindView(R.id.weibo_image_hotspot) ImageButton weibo_image_hopost;
     @BindView(R.id.weibo_image_perosn) ImageButton weibo_image_perosn;
+    @BindView(R.id.viewpager) ViewPager viewpager;
 
-    @BindView(R.id.viewpager)
-    ViewPager viewpager;
     private ViewPaerFragmentPagerAdapter mAdapter;
 
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
+
+    private String token;
+    private String uid ;
+    private Long time;
+    private boolean isLogin;
 
     /**
      * TAG:启动Fragment
@@ -71,75 +77,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        wcarbo = (wcarbo) getApplication();
-
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.toolbar_nav_home);
-        }
-        mNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_item_profile:
-                        //个人主页
-                        init(R.id.nav_item_profile);
-                        break;
-                    case R.id.nav_item_friends:
-                        //我的好友()
-                        init(R.id.nav_item_friends);
-                        break;
-                    case R.id.nav_item_Collection:
-                        //我的收藏
-                        init(R.id.nav_item_Collection);
-                        break;
-                    case R.id.nav_item_DraftBox:
-                        //草稿箱
-                        break;
-                    case R.id.nav_item_login:
-                        //登陆
-                            mSsoHandler.authorizeWeb(new SelfWbAuthListener());
-                        break;
-                    case R.id.nav_item_logout:
-                        //登出
-                        AccessTokenKeeper.clear(wcarbo.getApplicationContext());
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-
-        mAdapter = new ViewPaerFragmentPagerAdapter(getSupportFragmentManager());
-        viewpager.setAdapter(mAdapter);
-        viewpager.setCurrentItem(PAGE_ONE);
-
-
+        wcarbo = (wcarbo) getApplication();
         mSsoHandler = new SsoHandler(MainActivity.this);
+        ReadToken();
+        isLogin = isLogin();
 
-    }
+        setToolbar();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar, menu);
-        return true;
-    }
+        setNavView();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                //打开项目
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
-            default:
-                break;
-        }
-        return true;
+        setViewpager();
     }
 
     @OnClick({R.id.weibo_image_cardview, R.id.weibo_image_hotspot, R.id.weibo_image_perosn})
@@ -183,12 +131,13 @@ public class MainActivity extends AppCompatActivity {
         public void cancel() {
             Toast.makeText(MainActivity.this,
                     "取消授权", Toast.LENGTH_LONG).show();
-
+            finish();
         }
 
         @Override
         public void onFailure(WbConnectErrorMessage errorMessage) {
             Toast.makeText(MainActivity.this, errorMessage.getErrorMessage(), Toast.LENGTH_LONG).show();
+            showButtonDialogFragment(getCurrentFocus());
         }
 
     }
@@ -209,8 +158,110 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, ClickButtonActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_CLICKBUTTONACTIVITY, resId);
-        Log.d("friends",resId+"main");
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    private void setToolbar(){
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.toolbar_nav_home);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //打开项目
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void setNavView() {
+        mNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_item_profile:
+                        //个人主页
+                        init(R.id.nav_item_profile);
+                        break;
+                    case R.id.nav_item_friends:
+                        //我的好友()
+                        init(R.id.nav_item_friends);
+                        break;
+                    case R.id.nav_item_Collection:
+                        //我的收藏
+                        init(R.id.nav_item_Collection);
+                        break;
+                    case R.id.nav_item_DraftBox:
+                        //草稿箱
+                        break;
+                    case R.id.nav_item_logout:
+                        //登出
+                        AccessTokenKeeper.clear(wcarbo.getApplicationContext());
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void setViewpager() {
+        mAdapter = new ViewPaerFragmentPagerAdapter(getSupportFragmentManager());
+        viewpager.setAdapter(mAdapter);
+        viewpager.setCurrentItem(PAGE_ONE);
+    }
+
+    public void showButtonDialogFragment(View view) {
+        loginDialog loginDialog = new  loginDialog();
+        loginDialog.show("登录到你的微博", "登陆过期或者暂时登陆", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mSsoHandler.authorizeWeb(new SelfWbAuthListener());
+                Toast.makeText(MainActivity.this, "点击了确定 " + which, Toast.LENGTH_SHORT).show();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        }, getSupportFragmentManager());
+    }
+
+    private void ReadToken(){
+        Oauth2AccessToken tk = AccessTokenKeeper.readAccessToken(this);
+        token = tk.getToken();
+        uid = tk.getUid();
+        time = tk.getExpiresTime();
+    }
+
+    private boolean isLogin(){
+        boolean result = true;
+        if (time == null){
+            showButtonDialogFragment(getCurrentFocus());
+            result = false;
+        } else {
+            long Systemtime=System.currentTimeMillis();
+            if (time <= Systemtime){
+                showButtonDialogFragment(getCurrentFocus());
+                result = true;
+            }
+        }
+        return result;
     }
 }
