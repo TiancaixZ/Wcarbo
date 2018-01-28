@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.example.chenguozhen.wcarbo.Constants;
+import com.example.chenguozhen.wcarbo.Fragment_add.Fragment_Addweibo;
 import com.example.chenguozhen.wcarbo.Fragment_weibo_detailed.Fragment_weibo_detailed_reposts;
 import com.example.chenguozhen.wcarbo.Fragment_weibo_favouite.Fragment_weibo_favorite;
 import com.example.chenguozhen.wcarbo.Fragment_weibo_detailed.Fragment_weibo_detailed;
@@ -12,6 +13,8 @@ import com.example.chenguozhen.wcarbo.Fragment_weibo_friends.Fragment_nav_friend
 import com.example.chenguozhen.wcarbo.Fragment_weibo_userpager.Fragment_userpager;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.activity.ClickButtonActivity;
+
+import static com.example.chenguozhen.wcarbo.Fragment_add.Fragment_Addweibo.Addweibo;
 
 
 /**
@@ -63,6 +66,10 @@ public class FragmentFactory {
                 fragment = Fragment_weibo_detailed.newInstance
                         (Fragment_weibo_detailed.Reposts,ClickButtonActivity.detail_idstr);
                 ClickButtonActivity.title = "转发";
+                break;
+            case Fragment_Addweibo.Addweibo:
+                fragment = new Fragment_Addweibo();
+                ClickButtonActivity.title = "发微博";
                 break;
             default:
                 break;

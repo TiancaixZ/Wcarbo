@@ -10,6 +10,7 @@ import com.example.chenguozhen.wcarbo.Bean.JSON.Users;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
 import com.example.chenguozhen.wcarbo.Bean.Public;
 import com.example.chenguozhen.wcarbo.Bean.Repost;
+import com.example.chenguozhen.wcarbo.Bean.Statuses;
 import com.google.gson.Gson;
 import com.lzy.ninegrid.ImageInfo;
 
@@ -388,11 +389,7 @@ public class JSONUitily {
      */
     public static Favorites favorites(String jsondata){
         Favorites favorites = new Favorites();
-
         try {
-            Gson gson = new Gson();
-            error error = gson.fromJson(jsondata, com.example.chenguozhen.wcarbo.Bean.Gson.error.class);
-            favorites.setError(error);
             JSONObject jsonBody = new JSONObject(jsondata);
             List<Favorites.FavoritesBean> favoritesBeans = new ArrayList<Favorites.FavoritesBean>();
             JSONArray favoritearrays = jsonBody.getJSONArray("favorites");
@@ -425,11 +422,7 @@ public class JSONUitily {
      */
     public static Public publics(String jsondata){
         Public publics = new Public();
-
             try {
-                Gson gson = new Gson();
-                error error = gson.fromJson(jsondata, com.example.chenguozhen.wcarbo.Bean.Gson.error.class);
-                publics.setError(error);
                 ArrayList<Status> statusArrayList = new ArrayList<Status>();
                 JSONObject jsonBody = new JSONObject(jsondata);
                 JSONArray statuses = jsonBody.getJSONArray("statuses");
@@ -453,9 +446,6 @@ public class JSONUitily {
     public static Comments comments(String jsondata){
         Comments comments = new Comments();
         try {
-            Gson gson = new Gson();
-            error error = gson.fromJson(jsondata, com.example.chenguozhen.wcarbo.Bean.Gson.error.class);
-            comments.setError(error);
             JSONObject jsonBody = new JSONObject(jsondata);
             long max_id = jsonBody.getLong("max_id");
             comments.setMax_id(max_id);
@@ -495,9 +485,6 @@ public class JSONUitily {
     public static Repost repost(String jsondata){
         Repost repost = new Repost();
         try {
-            Gson gson = new Gson();
-            error error = gson.fromJson(jsondata, com.example.chenguozhen.wcarbo.Bean.Gson.error.class);
-            repost.setError(error);
             JSONObject jsonBody = new JSONObject(jsondata);
             int total_number = jsonBody.getInt("total_number");
             repost.setTotal_number(total_number);
@@ -549,8 +536,6 @@ public class JSONUitily {
                 commentList.add(comment);
             }
             comments.setComments(commentList);
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -558,6 +543,35 @@ public class JSONUitily {
         return comments;
     }
 
+    /**
+     *
+     * @param jsondata
+     * @return
+     */
+    public static Statuses statuses(String jsondata){
+        Statuses statuses = new Statuses();
+        try {
+            JSONObject jsonBody = new JSONObject(jsondata);
+            int total_number = jsonBody.getInt("total_number");
+            statuses.setTotal_number(total_number);
+            long previous_cursor = jsonBody.getLong("previous_cursor");
+            statuses.setPrevious_cursor(previous_cursor);
+            long next_cursor = jsonBody.getLong("next_cursor");
+            statuses.setNext_cursor(next_cursor);
 
+            ArrayList<Status> arrayList = new ArrayList<Status>();
+            JSONArray statusArray = jsonBody.getJSONArray("statuses");
+            for (int i = 0; i < statusArray.length(); i++) {
+                JSONObject count = statusArray.getJSONObject(i);
+                Status status = parseJSON_Status(count);
+                arrayList.add(status);
+            }
+            statuses.setStatusList(arrayList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+        return statuses;
+    }
 
 }

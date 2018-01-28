@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,28 +57,18 @@ public class MainActivity extends AppCompatActivity {
      */
     public static final String EXTRA_CLICKBUTTONACTIVITY = "com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS";
 
-    /**
-     * 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能
-     */
     private Oauth2AccessToken mAccessToken;
-
-    /**
-     * 注意：SsoHandler 仅当 SDK 支持 SSO 时有效
-     */
     private SsoHandler mSsoHandler;
-
-    /**
-     * application
-     **/
     private wcarbo wcarbo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         wcarbo = (wcarbo) getApplication();
         mSsoHandler = new SsoHandler(MainActivity.this);
+        ButterKnife.bind(this);
+
         ReadToken();
         isLogin = isLogin();
 
@@ -97,10 +86,14 @@ public class MainActivity extends AppCompatActivity {
                 viewpager.setCurrentItem(PAGE_ONE);
                 break;
             case R.id.weibo_image_hotspot:
-                viewpager.setCurrentItem(PAGE_TWO);
+                if (isLogin){
+                    viewpager.setCurrentItem(PAGE_TWO);
+                }
                 break;
             case R.id.weibo_image_perosn:
-                viewpager.setCurrentItem(PAGE_THREE);
+                if (isLogin) {
+                    viewpager.setCurrentItem(PAGE_THREE);
+                }
                 break;
             default:
                 break;
@@ -159,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_CLICKBUTTONACTIVITY, resId);
         intent.putExtras(bundle);
-        startActivity(intent);
+        if (isLogin) {
+            startActivity(intent);
+        }
     }
 
     private void setToolbar(){
@@ -213,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_item_logout:
                         //登出
                         AccessTokenKeeper.clear(wcarbo.getApplicationContext());
+                        break;
                     default:
                         break;
                 }
@@ -264,4 +260,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return result;
     }
+
+
+
+
 }

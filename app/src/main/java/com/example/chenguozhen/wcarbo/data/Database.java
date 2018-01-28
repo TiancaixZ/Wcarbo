@@ -12,5 +12,5 @@ public interface Database<T> {
 
     void update(List<T> ts);
 
-    void query(List<T> ts);
+    List<T> query();
 }

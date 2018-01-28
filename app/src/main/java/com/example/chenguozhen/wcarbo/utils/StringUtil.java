@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -116,7 +116,7 @@ public class StringUtil {
 
         @Override
         public void onClick(View widget) {
-
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl)));
         }
     }
 
@@ -168,5 +168,71 @@ public class StringUtil {
         }
     }
 
+    public static TextWatcher textNumberListener(final EditText editText, final TextView textView, final Context context) {
+        //输入字符监听
+        TextWatcher mTextWatcher = new TextWatcher() {
+            private CharSequence temp;
+            private int editStart;
+            private int editEnd;
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                temp = s;
+                if (140 - s.length() == 0) {
+                    textView.setText("超出字数限制！");
+                    textView.setTextColor(Color.RED);
+                } else {
+                    textView.setText(String.valueOf(140 - s.length()));
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+                editStart = editText.getSelectionStart();
+                editEnd = editText.getSelectionEnd();
+                if (temp.length() > 140) {
+                    Toast.makeText(context,
+                            "你输入的字数已经超过了限制！", Toast.LENGTH_SHORT)
+                            .show();
+                    s.delete(editStart - 1, editEnd);
+                    int tempSelection = editStart;
+                    editText.setText(s);
+                    editText.setSelection(tempSelection);
+                }
+            }
+        };
+
+        return mTextWatcher;
+    }
+
+    /**
+     * 实现文本复制功能
+     * add by wangqianzhou
+     *
+     * @param content
+     */
+    public static void copy(String content, Context context) {
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(content.trim());
+    }
+
+    /**
+     * 实现粘贴功能
+     * add by wangqianzhou
+     *
+     * @param context
+     * @return
+     */
+    public static String paste(Context context) {
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        return cmb.getText().toString().trim();
+    }
 }

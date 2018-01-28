@@ -41,7 +41,8 @@ public class FriendsData implements Database<Frindes>{
     }
 
     @Override
-    public void query(List<Frindes> frindes) {
-
+    public List<Frindes> query() {
+        return null;
     }
+
 }

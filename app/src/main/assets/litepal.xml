@@ -2,12 +2,13 @@
 
     <dbname value="wcarbodb" />
 
-    <version value="6" ></version>
+    <version value="7" ></version>
 
     <list>
         <mapping class = "com.example.chenguozhen.wcarbo.Bean.JSON.Frindes"></mapping>
         <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Users"></mapping>
         <mapping class="com.example.chenguozhen.wcarbo.Bean.Gson.emotions"></mapping>
+        <mapping class="com.example.chenguozhen.wcarbo.Bean.JSON.Status"></mapping>
     </list>
 
 </litepal>

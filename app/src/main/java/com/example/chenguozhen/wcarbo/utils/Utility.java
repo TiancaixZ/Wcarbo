@@ -52,7 +52,6 @@ public class Utility {
                 String responseData = response.body().string();
                 switch (Query){
                     case QueryFriends:
-                        Log.d("json",responseData);
                         FriendsData friendsData = new FriendsData();
                         friendsData.onLoad(JSONUitily.frindesList(responseData));
                         break;
@@ -112,6 +111,35 @@ public class Utility {
         builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
         builder.addQueryParameter("id",idstr);
         builder.addQueryParameter("max_id", String.valueOf(next_cursor));
+        Request request = new Request.Builder()
+                .url(builder.build())
+                .build();
+        return request;
+    }
+
+    /**
+     * 微博时间轴
+     * @param url
+     * @param max_id
+     * @param since_id
+     * @param access_token
+     * @return
+     */
+    public static Request timeline_builder(String url,long max_id,long since_id,String access_token){
+        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+        builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
+        builder.addQueryParameter("max_id", String.valueOf(max_id));
+        builder.addQueryParameter("since_id",String.valueOf(since_id));
+        Request request = new Request.Builder()
+                .url(builder.build())
+                .build();
+        return request;
+    }
+
+    public static Request user_builder(String url,String access_token,String uid){
+        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+        builder.addQueryParameter(Oauth2AccessToken.KEY_ACCESS_TOKEN,access_token);
+        builder.addQueryParameter("uid", uid);
         Request request = new Request.Builder()
                 .url(builder.build())
                 .build();

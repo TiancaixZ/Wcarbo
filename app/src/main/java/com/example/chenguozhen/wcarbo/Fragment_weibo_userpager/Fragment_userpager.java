@@ -20,6 +20,8 @@ import com.example.chenguozhen.wcarbo.Bean.JSON.Frindes;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Users;
 import com.example.chenguozhen.wcarbo.utils.Utility;
 import com.example.chenguozhen.wcarbo.wcarbo;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import org.litepal.crud.DataSupport;
 
@@ -74,8 +76,9 @@ public class Fragment_userpager extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        token = ((wcarbo)getActivity().getApplication()).getToken();
-        uId = ((wcarbo)getActivity().getApplication()).getUid();
+        Oauth2AccessToken tk = AccessTokenKeeper.readAccessToken(getContext());
+        token = tk.getToken();
+        uId = tk.getUid();
 
         new Thread(new UeseQuery()).start();
     }

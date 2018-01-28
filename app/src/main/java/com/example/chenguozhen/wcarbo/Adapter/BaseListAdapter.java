@@ -3,9 +3,9 @@ package com.example.chenguozhen.wcarbo.Adapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +25,6 @@ import com.example.chenguozhen.wcarbo.RecyclerView.Holder.TextViewHolder;
 
 import com.example.chenguozhen.wcarbo.activity.ClickButtonActivity;
 import com.example.chenguozhen.wcarbo.utils.DataUtil;
-import com.example.chenguozhen.wcarbo.utils.FragmentFactory;
 import com.example.chenguozhen.wcarbo.utils.ImageLoader;
 import com.example.chenguozhen.wcarbo.utils.StringUtil;
 import com.example.chenguozhen.wcarbo.wcarbo;
@@ -34,6 +33,7 @@ import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 
 import java.util.List;
+
 
 /**
  * Created by chenguozhen on 2018/1/18.
@@ -109,14 +109,14 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position));
+                    detail_comment(PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_image_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position));
+                    detail_respot(PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -142,14 +142,14 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position));
+                    detail_comment(PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_text_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position));
+                    detail_respot(PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -189,28 +189,28 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position));
+                    detail_comment(PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_iamge_comment_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position));
+                    detail_comment(PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.weibo_iamge_forward_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position));
+                    detail_respot(PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.retweeted_weibo_iamge_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position));
+                    detail_respot(PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -250,28 +250,28 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position));
+                    detail_comment(PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_text_comment_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position));
+                    detail_comment(PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.weibo_text_forward_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position));
+                    detail_respot(PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.retweeted_weibo_text_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position));
+                    detail_respot(PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -310,7 +310,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
         String time = DataUtil.showTime(status.getCreated_at());
         String source = StringUtil.getWeiboSource(status.getSource());
-        String content = status.getText();
+        Spannable content = StringUtil.getWeiBoText(wcarbo.getContext(),status.getText());
         boolean favorited = status.isFavorited();
         boolean truncated = status.isTruncated();
         int reposts_count = status.getReposts_count();
@@ -328,6 +328,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((ImageViewHolder) holder).weibo_image_time.setText(time);
             ((ImageViewHolder) holder).weibo_image_source.setText(source);
             ((ImageViewHolder) holder).weibo_image_contnet_text.setText(content);
+            ((ImageViewHolder) holder).weibo_image_contnet_text.setMovementMethod(LinkMovementMethod.getInstance());
             ((ImageViewHolder) holder).weibo_image_forward.setText(reposts_count+"");
             ((ImageViewHolder) holder).weibo_image_comment.setText(comments_count+"");
             ((ImageViewHolder) holder).weibo_image_thumbsup.setText(attitudes_count+"");
@@ -348,6 +349,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((TextViewHolder) holder).weibo_text_time.setText(time);
             ((TextViewHolder) holder).weibo_text_source.setText(source);
             ((TextViewHolder) holder).weibo_text_contnet_text.setText(content);
+            ((TextViewHolder) holder).weibo_text_contnet_text.setMovementMethod(LinkMovementMethod.getInstance());
             ((TextViewHolder) holder).weibo_text_forward.setText(reposts_count+"");
             ((TextViewHolder) holder).weibo_text_comment.setText(comments_count+"");
             ((TextViewHolder) holder).weibo_text_thumbsup.setText(attitudes_count+"");
@@ -363,6 +365,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_time.setText(time);
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_source.setText(source);
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_contnet_text.setText(content);
+            ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_contnet_text.setMovementMethod(LinkMovementMethod.getInstance());
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_forward.setText(reposts_count+"");
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_comment.setText(comments_count+"");
             ((RetweetedImageViewHolder) holder).retweeted_weibo_iamge_thumbsup.setText(attitudes_count+"");
@@ -389,6 +392,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((RetweetedImageViewHolder) holder).weibo_iamge_time_retweeted.setText(retweeted_time);
             ((RetweetedImageViewHolder) holder).weibo_iamge_source_retweeted.setText(retweeted_source);
             ((RetweetedImageViewHolder) holder).weibo_iamge_contnet_text_retweeted.setText(retweeted_text);
+            ((RetweetedImageViewHolder) holder).weibo_iamge_contnet_text_retweeted.setMovementMethod(LinkMovementMethod.getInstance());
             ((RetweetedImageViewHolder) holder).weibo_iamge_forward_retweeted.setText(retweeted_reposts_count + "");
             ((RetweetedImageViewHolder) holder).weibo_iamge_comment_retweeted.setText(retweeted_comments_count + "");
             ((RetweetedImageViewHolder) holder).weibo_iamge_thumbsup_retweeted.setText(retweeted_attiudes_count+"");
@@ -406,6 +410,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_time.setText(time);
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_source.setText(source);
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_contnet_text.setText(content);
+            ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_contnet_text.setMovementMethod(LinkMovementMethod.getInstance());
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_forward.setText(reposts_count+"");
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_comment.setText(comments_count+"");
             ((RetwwetedTextViewHolder) holder).retweeted_weibo_text_thumbsup.setText(attitudes_count+"");
@@ -431,6 +436,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((RetwwetedTextViewHolder) holder).weibo_text_time_retweeted.setText(retweeted_time);
             ((RetwwetedTextViewHolder) holder).weibo_text_source_retweeted.setText(retweeted_source);
             ((RetwwetedTextViewHolder) holder).weibo_text_contnet_text_retweeted.setText(retweeted_text);
+            ((RetwwetedTextViewHolder) holder).weibo_text_contnet_text_retweeted.setMovementMethod(LinkMovementMethod.getInstance());
             ((RetwwetedTextViewHolder) holder).weibo_text_forward_retweeted.setText(retweeted_reposts_count+"");
             ((RetwwetedTextViewHolder) holder).weibo_text_comment_retweeted.setText(retweeted_comments_count+"");
             ((RetwwetedTextViewHolder) holder).weibo_text_thumbsup_retweeted.setText(retweeted_attiudes_count+"");
@@ -447,6 +453,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
             ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_time.setText(time);
             ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_source.setText(source);
             ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_contnet_text.setText(content);
+            ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_contnet_text.setMovementMethod(LinkMovementMethod.getInstance());
             ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_forward.setText(reposts_count+"");
             ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_comment.setText(comments_count+"");
             ((RetweetedDeletedViewHolder) holder).retweeted_weibo_deleted_thumbsup.setText(attitudes_count+"");
@@ -472,20 +479,20 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         mFragment.startActivity(intent);
     }
 
-    private void detail_comment(Status status){
+    private void detail_comment(String idstr){
         Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Fragment_weibo_detailed.Comments);
-        bundle.putString("detail",status.getIdstr());
+        bundle.putString("detail",idstr);
         intent.putExtras(bundle);
         mFragment.startActivity(intent);
     }
 
-    private void detail_respot(Status status){
+    private void detail_respot(String idstr){
         Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Fragment_weibo_detailed.Reposts);
-        bundle.putString("detail",status.getIdstr());
+        bundle.putString("detail",idstr);
         intent.putExtras(bundle);
         mFragment.startActivity(intent);
     }
