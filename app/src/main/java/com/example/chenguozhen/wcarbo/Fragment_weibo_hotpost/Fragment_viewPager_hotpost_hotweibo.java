@@ -24,7 +24,7 @@ import okhttp3.Response;
  * Created by chenguozhen on 2017/9/20.
  */
 
-public class Fragment_viewPager_hotpost_hotweibo extends BaseListFragment{
+public class Fragment_viewPager_hotpost_hotweibo extends BaseListFragment {
 
     private List<Status> publicList = new ArrayList<Status>();
     private String url = "https://api.weibo.com/2/statuses/public_timeline.json?source=3867086258";

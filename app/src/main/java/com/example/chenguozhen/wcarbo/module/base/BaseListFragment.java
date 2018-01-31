@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.chenguozhen.wcarbo.Adapter.EndlessRecyclerViewScrollListener;
+import com.example.chenguozhen.wcarbo.Interface.RecyclerViewItemClickLisntner;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.wcarbo;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -20,6 +21,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Request;
 
 /**
  * Created by chenguozhen on 2018/1/19.
@@ -42,6 +44,7 @@ public abstract class BaseListFragment extends Fragment{
         token = tk.getToken();
         if (token != null){
             Create_Content(token);
+
         }
     }
 
@@ -82,12 +85,9 @@ public abstract class BaseListFragment extends Fragment{
 
     protected abstract void Create_Content(String token);
 
-    protected void SwipeRefresh_Refresh(String token){
-    }
+    protected abstract void SwipeRefresh_Refresh(String token);
 
-    protected void ScrollListener_LoadMore(String token){
-    }
+    protected abstract void ScrollListener_LoadMore(String token);
 
     public abstract RecyclerView.Adapter adapter();
-
 }

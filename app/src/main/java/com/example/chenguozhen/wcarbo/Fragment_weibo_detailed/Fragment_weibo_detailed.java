@@ -27,7 +27,6 @@ public class Fragment_weibo_detailed extends BaseTabViewpagerFragment{
         Bundle args = new Bundle();
         args.putInt("position",currentitem);
         args.putString("detail",detial_idstr);
-        Log.d("comment_detailed",detial_idstr);
         Fragment_weibo_detailed fragment_weibo_detailed = new Fragment_weibo_detailed();
         fragment_weibo_detailed.setArguments(args);
         return fragment_weibo_detailed;

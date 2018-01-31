@@ -26,6 +26,7 @@ import com.example.chenguozhen.wcarbo.RecyclerView.Holder.TextViewHolder;
 import com.example.chenguozhen.wcarbo.activity.ClickButtonActivity;
 import com.example.chenguozhen.wcarbo.utils.DataUtil;
 import com.example.chenguozhen.wcarbo.utils.ImageLoader;
+import com.example.chenguozhen.wcarbo.utils.IntentUtil;
 import com.example.chenguozhen.wcarbo.utils.StringUtil;
 import com.example.chenguozhen.wcarbo.wcarbo;
 import com.lzy.ninegrid.ImageInfo;
@@ -34,6 +35,7 @@ import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 
 import java.util.List;
 
+import static com.example.chenguozhen.wcarbo.activity.ClickButtonActivity.Fragment_UserBean;
 
 /**
  * Created by chenguozhen on 2018/1/18.
@@ -93,7 +95,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,PositionStatus(position).getUsersBean());
 
                 }
             });
@@ -101,7 +103,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,PositionStatus(position).getUsersBean());
 
                 }
             });
@@ -109,14 +111,14 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Comments,PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_image_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Reposts,PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -128,28 +130,28 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,PositionStatus(position).getUsersBean());
                 }
             });
             holder.weibo_text_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,PositionStatus(position).getUsersBean());
                 }
             });
             holder.weibo_text_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Comments,PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_text_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Reposts,PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -161,56 +163,62 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,PositionStatus(position).getUsersBean());
                 }
             });
             holder.retweeted_weibo_iamge_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,PositionStatus(position).getUsersBean());
                 }
             });
             holder.weibo_iamge_avatar_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getRetweeted_status().getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getRetweeted_status().getUsersBean());
                 }
             });
             holder.weibo_iamge_name_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getRetweeted_status().getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getRetweeted_status().getUsersBean());
                 }
             });
             holder.retweeted_weibo_iamge_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Comments,
+                            PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_iamge_comment_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position).getRetweeted_status().getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Comments,
+                            PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.weibo_iamge_forward_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position).getRetweeted_status().getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Reposts,
+                            PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.retweeted_weibo_iamge_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Reposts,
+                            PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -222,56 +230,65 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getUsersBean());
+
                 }
             });
             holder.retweeted_weibo_text_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getUsersBean());
                 }
             });
             holder.weibo_text_avatar_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getRetweeted_status().getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getRetweeted_status().getUsersBean());
                 }
             });
             holder.weibo_text_name_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getRetweeted_status().getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getRetweeted_status().getUsersBean());
                 }
             });
             holder.retweeted_weibo_text_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Comments,
+                            PositionStatus(position).getIdstr());
                 }
             });
             holder.weibo_text_comment_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_comment(PositionStatus(position).getRetweeted_status().getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Comments,
+                            PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.weibo_text_forward_retweeted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position).getRetweeted_status().getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Reposts,
+                            PositionStatus(position).getRetweeted_status().getIdstr());
                 }
             });
             holder.retweeted_weibo_text_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    detail_respot(PositionStatus(position).getIdstr());
+                    IntentUtil.idstr_intent(Fragment_weibo_detailed.Reposts,
+                            PositionStatus(position).getIdstr());
                 }
             });
             return holder;
@@ -288,14 +305,16 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getUsersBean());
                 }
             });
             holder.retweeted_weibo_deleted_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    userpage(PositionStatus(position).getUsersBean());
+                    IntentUtil.usersBean_intent(Fragment_UserBean,
+                            PositionStatus(position).getUsersBean());
                 }
             });
             return holder;
@@ -468,33 +487,6 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemCount() {
         return mDataList.size();
-    }
-
-    private void userpage(UsersBean usersBean) {
-        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Constants.collection_usepager);
-        bundle.putSerializable("UserBean",usersBean);
-        intent.putExtras(bundle);
-        mFragment.startActivity(intent);
-    }
-
-    private void detail_comment(String idstr){
-        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Fragment_weibo_detailed.Comments);
-        bundle.putString("detail",idstr);
-        intent.putExtras(bundle);
-        mFragment.startActivity(intent);
-    }
-
-    private void detail_respot(String idstr){
-        Intent intent = new Intent(wcarbo.getContext(),ClickButtonActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("com.example.chenguozhen.wcarbo.activity.NAV_FRIENDS", Fragment_weibo_detailed.Reposts);
-        bundle.putString("detail",idstr);
-        intent.putExtras(bundle);
-        mFragment.startActivity(intent);
     }
 
     protected Status PositionStatus(int position){

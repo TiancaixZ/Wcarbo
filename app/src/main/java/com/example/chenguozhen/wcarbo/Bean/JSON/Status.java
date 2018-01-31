@@ -5,13 +5,14 @@ import com.lzy.ninegrid.ImageInfo;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by chenguozhen on 2018/1/16.
  */
 
-public class Status extends DataSupport{
+public class Status extends DataSupport implements Serializable{
     private String created_at;
     private long id;
     private String idstr;

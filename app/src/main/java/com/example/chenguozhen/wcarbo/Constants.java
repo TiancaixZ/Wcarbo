@@ -42,6 +42,4 @@ public interface Constants {
                     + "follow_app_official_microblog," + "invitation_write";
     // public static final String SCOPE = null;
 
-    public static final int collection_usepager = 10;
-
 }

@@ -1,19 +1,25 @@
 package com.example.chenguozhen.wcarbo.utils;
 
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.example.chenguozhen.wcarbo.Bean.Gson.test;
 import com.example.chenguozhen.wcarbo.data.FriendsData;
-import com.google.gson.Gson;
+import com.example.chenguozhen.wcarbo.wcarbo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -62,6 +68,25 @@ public class Utility {
             }
         });
 
+    }
+
+    /**
+     *
+     * @param url
+     * @param access_token
+     * @param cid
+     * @return
+     */
+    public static Request destory_builder(String url, String access_token, String cid){
+        RequestBody body = new FormBody.Builder()
+                .add(Oauth2AccessToken.KEY_ACCESS_TOKEN, access_token)
+                .add("cid", cid)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+       return request;
     }
 
     /**
@@ -145,5 +170,33 @@ public class Utility {
                 .build();
         return request;
     }
+
+    public static Request create_builder(String url,String access_token,String id,String comment){
+        RequestBody body = new FormBody.Builder()
+                .add(Oauth2AccessToken.KEY_ACCESS_TOKEN, access_token)
+                .add("id",id)
+                .add("comment",comment)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        return request;
+    }
+
+    public static Request reply_builder(String url,String access_token,String id,String cid,String comment){
+        RequestBody body = new FormBody.Builder()
+                .add(Oauth2AccessToken.KEY_ACCESS_TOKEN, access_token)
+                .add("id",id)
+                .add("cid", cid)
+                .add("comment",comment)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        return request;
+    }
+
 
 }

@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 
 import com.example.chenguozhen.wcarbo.Adapter.CommentReportAdapter;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+import com.example.chenguozhen.wcarbo.Interface.RecyclerViewItemClickLisntner;
 
 import java.util.List;
 
@@ -14,10 +15,11 @@ import java.util.List;
 public class repost_list_adapter extends CommentReportAdapter<Status>{
     private List<Status> mDataList;
 
-    public repost_list_adapter(List<Status> DataList, Fragment Fragment) {
-        super(DataList, Fragment);
+    public repost_list_adapter(List<Status> DataList, Fragment Fragment,RecyclerViewItemClickLisntner lisntner) {
+        super(DataList, Fragment,lisntner);
         this.mDataList = DataList;
     }
+
 
     @Override
     protected Status status(int position) {

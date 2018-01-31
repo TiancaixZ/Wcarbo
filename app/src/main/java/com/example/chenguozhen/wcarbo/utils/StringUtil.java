@@ -168,7 +168,7 @@ public class StringUtil {
         }
     }
 
-    public static TextWatcher textNumberListener(final EditText editText, final TextView textView, final Context context) {
+    public static TextWatcher textNumberListener(final EditText editText,final Context context) {
         //输入字符监听
         TextWatcher mTextWatcher = new TextWatcher() {
             private CharSequence temp;
@@ -177,13 +177,15 @@ public class StringUtil {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO Auto-generated method stub
                 temp = s;
                 if (140 - s.length() == 0) {
-                    textView.setText("超出字数限制！");
-                    textView.setTextColor(Color.RED);
+                    Toast.makeText(context,
+                            "你输入的字数已经超过了限制！", Toast.LENGTH_SHORT)
+                            .show();
                 } else {
-                    textView.setText(String.valueOf(140 - s.length()));
+                    Toast.makeText(context,
+                            String.valueOf(140 - s.length()), Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
 
@@ -195,7 +197,6 @@ public class StringUtil {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
                 editStart = editText.getSelectionStart();
                 editEnd = editText.getSelectionEnd();
                 if (temp.length() > 140) {

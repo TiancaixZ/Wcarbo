@@ -1,5 +1,6 @@
 package com.example.chenguozhen.wcarbo.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,8 @@ import static com.example.chenguozhen.wcarbo.activity.MainActivity.EXTRA_CLICKBU
 
 public class ClickButtonActivity extends AppCompatActivity {
 
+    public static final int Fragment_UserBean = 1000;
+
     @BindView(R.id.click_toolbar) Toolbar toolbar;
 
     private FragmentManager fragmentManager;
@@ -33,6 +36,7 @@ public class ClickButtonActivity extends AppCompatActivity {
     public static Frindes frindes;
     public static UsersBean usersBean;
     public static String detail_idstr;
+    public static String cid;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -46,6 +50,7 @@ public class ClickButtonActivity extends AppCompatActivity {
         frindes = (Frindes) bundle.getSerializable("frindes");
         usersBean = (UsersBean) bundle.getSerializable("UserBean");
         detail_idstr = bundle.getString("detail");
+        cid = bundle.getString("cid");
 
         toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -61,5 +66,11 @@ public class ClickButtonActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.click_fragment, FragmentFactory.CreateByNav(resId));
         fragmentTransaction.commit();
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,12 +1,9 @@
 package com.example.chenguozhen.wcarbo.utils;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
-import com.example.chenguozhen.wcarbo.Constants;
 import com.example.chenguozhen.wcarbo.Fragment_add.Fragment_Addweibo;
-import com.example.chenguozhen.wcarbo.Fragment_weibo_detailed.Fragment_weibo_detailed_reposts;
+
 import com.example.chenguozhen.wcarbo.Fragment_weibo_favouite.Fragment_weibo_favorite;
 import com.example.chenguozhen.wcarbo.Fragment_weibo_detailed.Fragment_weibo_detailed;
 import com.example.chenguozhen.wcarbo.Fragment_weibo_friends.Fragment_nav_friends;
@@ -14,8 +11,8 @@ import com.example.chenguozhen.wcarbo.Fragment_weibo_userpager.Fragment_userpage
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.activity.ClickButtonActivity;
 
-import static com.example.chenguozhen.wcarbo.Fragment_add.Fragment_Addweibo.Addweibo;
-
+import static com.example.chenguozhen.wcarbo.activity.ClickButtonActivity.Fragment_UserBean;
+import static com.example.chenguozhen.wcarbo.activity.ClickButtonActivity.cid;
 
 /**
  * Created by chenguozhen on 2017/12/3.
@@ -43,18 +40,8 @@ public class FragmentFactory {
                 fragment = new Fragment_weibo_favorite();
                 ClickButtonActivity.title = "收藏";
                 break;
-            case R.id.friends_list_name:
-                fragment = new Fragment_userpager();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("fridnes", ClickButtonActivity.frindes);
-                fragment.setArguments(bundle);
-                ClickButtonActivity.title = "主页";
-                break;
-            case Constants.collection_usepager:
-                fragment = new Fragment_userpager();
-                Bundle bundle1 = new Bundle();
-                bundle1.putSerializable("userbean",ClickButtonActivity.usersBean);
-                fragment.setArguments(bundle1);
+            case Fragment_UserBean:
+                fragment = Fragment_userpager.newInstance(ClickButtonActivity.usersBean);
                 ClickButtonActivity.title = "主页";
                 break;
             case Fragment_weibo_detailed.Comments:
@@ -70,6 +57,16 @@ public class FragmentFactory {
             case Fragment_Addweibo.Addweibo:
                 fragment = new Fragment_Addweibo();
                 ClickButtonActivity.title = "发微博";
+                break;
+            case Fragment_Addweibo.ADDReposts:
+                fragment = Fragment_Addweibo.newInstance(ClickButtonActivity.detail_idstr,
+                        ClickButtonActivity.cid,Fragment_Addweibo.ADDReposts);
+                ClickButtonActivity.title = "写评论";
+                break;
+            case Fragment_Addweibo.AddReply:
+                fragment = Fragment_Addweibo.newInstance(ClickButtonActivity.detail_idstr,
+                        ClickButtonActivity.cid,Fragment_Addweibo.AddReply);
+                ClickButtonActivity.title = "回评论";
                 break;
             default:
                 break;

@@ -19,9 +19,11 @@ public class CommentRepostViewHolder extends RecyclerView.ViewHolder{
     public TextView created_at;
     public TextView source;
     public TextView content;
+    public View CommentRepostViewHolder;
 
     public CommentRepostViewHolder(View itemView) {
         super(itemView);
+        CommentRepostViewHolder = itemView;
         avatar = (CircleImageView)itemView.findViewById(R.id.avatar);
         name = (TextView)itemView.findViewById(R.id.name);
         created_at = (TextView)itemView.findViewById(R.id.created_at);

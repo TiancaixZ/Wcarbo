@@ -16,14 +16,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.chenguozhen.wcarbo.Bean.Gson.UsersBean;
 import com.example.chenguozhen.wcarbo.R;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Frindes;
-import com.example.chenguozhen.wcarbo.Bean.JSON.Users;
-import com.example.chenguozhen.wcarbo.utils.Utility;
-import com.example.chenguozhen.wcarbo.wcarbo;
-import com.sina.weibo.sdk.auth.AccessTokenKeeper;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-
-import org.litepal.crud.DataSupport;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,10 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Fragment_userpager extends Fragment{
 
-    private String token;
-    private String uId;
     private String url = "https://api.weibo.com/2/users/show.json?source=3867086258";
-    private Frindes frindes;
     private UsersBean usersBean;
 
     @BindView(R.id.usepager_circleimage) CircleImageView usepager_circleimage;
@@ -51,35 +40,36 @@ public class Fragment_userpager extends Fragment{
     @BindView(R.id.usepager_follower_textview) TextView usepager_follower;
     @BindView(R.id.usepager_recyclerview) RecyclerView usepager_recyclerview;
 
-    public static final int UPDATE_USEPAGER = 1;
-    public static final int UPDATE_FRINDESPAGER = 2;
     public static final int UPDATE_USERBEAN = 4;
+
+    private boolean stopThread = false;
 
     private Handler handler = new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case UPDATE_USEPAGER:
-                    Users user = (Users) msg.obj;
-                    setUpdateUsepager(user);
-                    break;
-                case UPDATE_FRINDESPAGER:
-                    setUpdateFrindespager(frindes);
-                    break;
                 case UPDATE_USERBEAN:
+
                     setUpdateUserbeanpager(usersBean);
+                    break;
+                default:
+                    break;
             }
         }
     };
 
+    public static Fragment_userpager newInstance(UsersBean usersBean){
+        Fragment_userpager fragment_userpager = new Fragment_userpager();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usersBean",usersBean);
+        fragment_userpager.setArguments(bundle);
+        return fragment_userpager;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Oauth2AccessToken tk = AccessTokenKeeper.readAccessToken(getContext());
-        token = tk.getToken();
-        uId = tk.getUid();
-
         new Thread(new UeseQuery()).start();
     }
 
@@ -95,68 +85,19 @@ public class Fragment_userpager extends Fragment{
     private class UeseQuery implements Runnable{
         @Override
         public void run() {
-            if (getArguments() == null){
-                doBackUespager();
-            } else if (getArguments().getSerializable("fridnes") != null){
-                frindes = (Frindes) getArguments().getSerializable("fridnes");
-                doBackFrindespager();
-            } else if (getArguments().getSerializable("userbean") !=null){
-                usersBean = (UsersBean) getArguments().getSerializable("userbean");
-                doBackWeiboUserweibopager();
+            while (!stopThread){
+                if (getArguments()!=null){
+                    usersBean = (UsersBean) getArguments().getSerializable("userbean");
+                    doBackWeiboUserweibopager();
+                }
             }
         }
     }
 
-    /**
-     * 更新view(Uses)
-     * @param user
-     */
-    private void setUpdateUsepager(Users user){
-        Glide.with(Fragment_userpager.this)
-                .load(user.getAvatar_hd())
-                .into(usepager_circleimage);
-
-        usepager_name.setText(user.getScreen_name());
-
-        if (user.getGender().equals("f")){
-            usepager_gender.setImageResource(R.drawable.women);
-        }
-
-        usepager_profile.setText(user.getDescription());
-
-        usepager_location.setText(user.getLocation());
-
-        usepager_contion.setText(user.getProfile_url());
-
-        usepager_attention.setText(user.getFrindes_count()+ "");
-
-        usepager_follower.setText(user.getFoolowers_count()+ "");
-    }
-
-    /**
-     * 更新View(Frindes)
-     * @param frindes
-     */
-    private void setUpdateFrindespager(Frindes frindes){
-        Glide.with(Fragment_userpager.this)
-                .load(frindes.getAvatar_large())
-                .into(usepager_circleimage);
-
-        usepager_name.setText(frindes.getScreen_name());
-
-        if (frindes.getGender().equals("f")){
-            usepager_gender.setImageResource(R.drawable.women);
-        }
-
-        usepager_profile.setText(frindes.getDescription());
-
-        usepager_location.setText(frindes.getLocation());
-
-        usepager_contion.setText(frindes.getProfile_image_url());
-
-        usepager_attention.setText(frindes.getFrindes_count()+ "");
-
-        usepager_follower.setText(frindes.getFollowers_count()+ "");
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        stopThread = true;
     }
 
     /**
@@ -183,27 +124,6 @@ public class Fragment_userpager extends Fragment{
         usepager_attention.setText(usersBean.getFriends_count()+ "");
 
         usepager_follower.setText(usersBean.getFollowers_count()+ "");
-    }
-
-    /**
-     * 后台处理数据发送message(Use)
-     */
-    private void doBackUespager(){
-        Utility.queryfriends(url,token,uId, Utility.QueryUse);
-        Users user = DataSupport.findLast(Users.class);
-        Message message = Message.obtain();
-        message.obj = user;
-        message.what = UPDATE_USEPAGER;
-        handler.sendMessage(message);
-    }
-
-    /**
-     * 后台处理数据发送message(Frindes)
-     */
-    private void doBackFrindespager(){
-        Message message = Message.obtain();
-        message.what = UPDATE_FRINDESPAGER;
-        handler.sendMessage(message);
     }
 
     /**

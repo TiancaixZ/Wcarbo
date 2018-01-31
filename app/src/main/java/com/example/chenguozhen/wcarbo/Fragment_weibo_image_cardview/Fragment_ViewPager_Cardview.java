@@ -157,7 +157,6 @@ public class Fragment_ViewPager_Cardview extends Fragment{
                 String responseData = response.body().string();
                 Statuses statuses = JSONUitily.statuses(responseData);
                 statusList = statuses.getStatusList();
-                since_id= statuses.getNext_cursor();
                 max_id = statuses.getMax_id();
             } catch (IOException e) {
                 e.printStackTrace();

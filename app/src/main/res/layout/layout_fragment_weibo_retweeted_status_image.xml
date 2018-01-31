@@ -62,7 +62,6 @@
             android:id="@+id/retweeted_weibo_iamge_boolean"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="230dp"
             style="@style/CustomCheckboxTheme"/>
 
     </LinearLayout>

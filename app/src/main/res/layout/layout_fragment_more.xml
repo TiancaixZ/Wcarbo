@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="3dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="test"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:text="test"/>
+
+                    <TextView
+                        android:id="@+id/source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:text="test"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="230dp"
+                style="@style/CustomCheckboxTheme"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="1dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/avatar_retweeted"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="3dp">
+
+                        <TextView
+                            android:id="@+id/name_retweeted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:text="test"/>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp">
+
+                            <TextView
+                                android:id="@+id/time_retweeted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:text="test"/>
+
+                            <TextView
+                                android:id="@+id/source_retweeted"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:text="test"
+                                android:layout_marginLeft="5dp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_retweeted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:layout_marginTop="1dp"/>
+
+                <com.lzy.ninegrid.NineGridView
+                    android:id="@+id/ninegridimageview_retweeted"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_width="match_parent"
+                    app:ngv_singleImageSize = "120dp"></com.lzy.ninegrid.NineGridView>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <Button
+                        android:id="@+id/forward_retweeted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="转发"
+                        android:textSize="10sp"
+                        android:drawableLeft="@drawable/forward">
+                    </Button>
+
+                    <Button
+                        android:id="@+id/comment_retweeted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="评论"
+                        android:textSize="10sp"
+                        android:drawableLeft="@drawable/comment">
+                    </Button>
+
+                    <Button
+                        android:id="@+id/thumbsup_retweeted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="赞"
+                        android:textSize="10sp"
+                        android:drawableLeft="@drawable/thumbsup_berfore"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/weibo_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="转发"
+            android:textSize="10sp"
+            android:drawableLeft="@drawable/forward">
+        </Button>
+
+        <Button
+            android:id="@+id/weibo_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="评论"
+            android:textSize="10sp"
+            android:drawableLeft="@drawable/comment">
+        </Button>
+
+        <Button
+            android:id="@+id/rweibo_thumbsup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="赞"
+            android:textSize="10sp"
+            android:drawableLeft="@drawable/thumbsup_berfore"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -9,13 +9,17 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Comment;
 import com.example.chenguozhen.wcarbo.Bean.JSON.Status;
+import com.example.chenguozhen.wcarbo.Interface.RecyclerViewItemClickLisntner;
 import com.example.chenguozhen.wcarbo.R;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.CommentRepostViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.FooterViewHolder;
 import com.example.chenguozhen.wcarbo.RecyclerView.Holder.HeaderViewHolder;
+import com.example.chenguozhen.wcarbo.utils.IntentUtil;
 import com.example.chenguozhen.wcarbo.utils.StringUtil;
 
 import java.util.List;
+
+import static com.example.chenguozhen.wcarbo.activity.ClickButtonActivity.Fragment_UserBean;
 
 /**
  * Created by chenguozhen on 2018/1/23.
@@ -32,10 +36,12 @@ public abstract class CommentReportAdapter<T> extends RecyclerView.Adapter<Recyc
 
     private List<T> mDataList;
     private Fragment mFragment;
+    private RecyclerViewItemClickLisntner mClickLisntner;
 
-    public CommentReportAdapter(List<T> DataList,Fragment Fragment) {
+    public CommentReportAdapter(List<T> DataList,Fragment Fragment, RecyclerViewItemClickLisntner ClickLisntner) {
         this.mDataList = DataList;
         this.mFragment = Fragment;
+        this.mClickLisntner = ClickLisntner;
     }
 
     public int getContentItemCount(){
@@ -66,6 +72,24 @@ public abstract class CommentReportAdapter<T> extends RecyclerView.Adapter<Recyc
             view = LayoutInflater.from(parent.getContext()).inflate
                     (R.layout.layout_fragment_weibo_commentrepost, parent, false);
             final CommentRepostViewHolder holder = new CommentRepostViewHolder(view);
+            holder.CommentRepostViewHolder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int position = holder.getAdapterPosition() - mHeaderCount;
+                    mClickLisntner.ItemClick(position);
+                }
+            });
+            holder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int position = holder.getAdapterPosition() - mHeaderCount;
+                    if (status(position) != null){
+                        IntentUtil.usersBean_intent(Fragment_UserBean,status(position).getUsersBean());
+                    } else if (comment(position) != null){
+                        IntentUtil.usersBean_intent(Fragment_UserBean,comment(position).getUsersBean());
+                    }
+                }
+            });
             return holder;
         } else if (viewType == HEADER){
             view = LayoutInflater.from(parent.getContext()).inflate
@@ -79,40 +103,45 @@ public abstract class CommentReportAdapter<T> extends RecyclerView.Adapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof CommentRepostViewHolder){
-                String avatar = null;
-                String name = null;
-                String created_at = null;
-                String source = null;
-                String content = null;
-                Comment comment = comment(position - mHeaderCount);
-                Status status = status(position-mHeaderCount);
-                if (status != null){
-                    avatar = status.getUsersBean().getAvatar_hd();
-                    name = status.getUsersBean().getScreen_name();
-                    created_at = status.getCreated_at();
-                    source =  StringUtil.getWeiboSource(status.getSource());
-                    content = status.getText();
-                } else if (comment != null){
-                    avatar = comment.getUsersBean().getAvatar_hd();
-                    name = comment.getUsersBean().getScreen_name();
-                    created_at = comment.getCreated_at();
-                    source =  StringUtil.getWeiboSource(comment.getSource());
-                    content = comment.getText();
-                }
-
-                Glide.with(mFragment)
-                        .load(avatar)
-                        .into(((CommentRepostViewHolder) holder).avatar);
-                ((CommentRepostViewHolder) holder).name.setText(name);
-                ((CommentRepostViewHolder) holder).created_at.setText(created_at);
-                ((CommentRepostViewHolder) holder).source.setText(source);
-                ((CommentRepostViewHolder) holder).content.setText(content);
-            } else if (holder instanceof FooterViewHolder){
-                ((FooterViewHolder) holder).footer_textView.setText("已经咩有了");
-            } else if (holder instanceof HeaderViewHolder){
-                ((HeaderViewHolder) holder).header_textView.setText("时间倒序排序");
+        if (holder instanceof CommentRepostViewHolder){
+            String avatar = null;
+            String name = null;
+            String created_at = null;
+            String source = null;
+            String content = null;
+            Comment comment = comment(position - mHeaderCount);
+            Status status = status(position-mHeaderCount);
+            if (status != null){
+                avatar = status.getUsersBean().getAvatar_hd();
+                name = status.getUsersBean().getScreen_name();
+                created_at = status.getCreated_at();
+                source =  StringUtil.getWeiboSource(status.getSource());
+                content = status.getText();
+            } else if (comment != null){
+                avatar = comment.getUsersBean().getAvatar_hd();
+                name = comment.getUsersBean().getScreen_name();
+                created_at = comment.getCreated_at();
+                source =  StringUtil.getWeiboSource(comment.getSource());
+                content = comment.getText();
             }
+
+            Glide.with(mFragment)
+                    .load(avatar)
+                    .into(((CommentRepostViewHolder) holder).avatar);
+            ((CommentRepostViewHolder) holder).name.setText(name);
+            ((CommentRepostViewHolder) holder).created_at.setText(created_at);
+            ((CommentRepostViewHolder) holder).source.setText(source);
+            ((CommentRepostViewHolder) holder).content.setText(content);
+        } else if (holder instanceof FooterViewHolder){
+            ((FooterViewHolder) holder).footer_textView.setText("已经咩有了");
+        } else if (holder instanceof HeaderViewHolder){
+            ((HeaderViewHolder) holder).header_textView.setText("时间倒序排序");
+        }
+    }
+
+    public void deleteItem(int index) {
+        mDataList.remove(index);
+        notifyItemRemoved(index);
     }
 
     @Override
@@ -121,7 +150,7 @@ public abstract class CommentReportAdapter<T> extends RecyclerView.Adapter<Recyc
     }
 
     protected Comment comment(int position){
-      return null;
+        return null;
     }
 
     protected Status status(int position){
